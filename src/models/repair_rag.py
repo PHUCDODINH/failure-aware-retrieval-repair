@@ -22,8 +22,9 @@ from src.models.patch_utils import (
     select_patch_snippets,
 )
 
-# Load environment variables
-load_dotenv(override=True)
+# Load environment variables (explicit env vars take precedence over .env,
+# so a per-run OPENAI_API_KEY / OPENAI_BASE_URL can target another provider)
+load_dotenv(override=False)
 
 # ============================================================================
 # Load embedding model (same as build_index.py)
@@ -76,6 +77,7 @@ def _strip_code_fences(text: str) -> str:
 # ============================================================================
 client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),
+    base_url=os.getenv("OPENAI_BASE_URL") or None,
     max_retries=0,
 )
 

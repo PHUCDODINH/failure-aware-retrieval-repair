@@ -15,11 +15,13 @@ from src.models.patch_utils import (
     select_patch_snippets,
 )
 
-# Load environment variables
-load_dotenv(override=True)
+# Load environment variables (explicit env vars take precedence over .env,
+# so a per-run OPENAI_API_KEY / OPENAI_BASE_URL can target another provider)
+load_dotenv(override=False)
 
 client = OpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),
+    base_url=os.getenv("OPENAI_BASE_URL") or None,
     max_retries=0,
 )
 DEFAULT_MODEL = os.getenv("OPENAI_MODEL", "gpt-4o-mini")
