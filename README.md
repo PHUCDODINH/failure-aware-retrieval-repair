@@ -5,13 +5,15 @@ when retrieval-augmented repair helps, when it is neutral, and when it hurts.
 
 The current research direction is:
 
-> Structured failure-aware reranking **significantly improves retrieval relevance**,
-> but this **does not convert to downstream repair gains** — across models, corpora,
-> and benchmarks, structured retrieval is statistically *neutral* on repair success
-> (no significant difference from baseline). The bottleneck is **retrieval quality,
-> not the model's ability to exploit an example**: a sufficiently relevant example
-> significantly improves a knowledge-gap model (oracle ceiling +25.7 pts, p<0.0001),
-> yet current retrieval surfaces none of that headroom.
+> Structured failure-aware reranking **significantly improves retrieval relevance**
+> (independent metric, p=0.0001), but this **does not convert to downstream repair
+> gains** — on synthetic/algorithmic benchmarks, structured retrieval is
+> **neutral-to-slightly-negative** (no effect larger than ~10 pp; MDE 5-9 pp). A
+> planted-corpus experiment localizes the binding constraint to **corpus coverage,
+> not retrieval ranking**: when a sufficiently-relevant example is guaranteed present,
+> repair converts (+21.9 pp) and plain dense retrieval already surfaces it, so
+> structured reranking adds nothing; when it is absent (the common case on realistic
+> corpora) no reranker can help.
 
 The intended paper framing is not "RAG always beats the baseline." The core claim is
 a critical, statistically-grounded characterization: explicit failure structure
@@ -116,7 +118,7 @@ Headline results (significance via `experiments/analysis/significance_tests.py`)
 | HumanEvalFix (gpt-4o/4.1/4o-mini/Llama-70B) | Structured is **statistically neutral** vs baseline (e.g. gpt-4o `132`→`126`, McNemar `p=0.11`, ns) — neither helps nor hurts |
 | Corpus ablation (HumanEvalFix) | BugsInPy vs genuine MBPP corpus: small, model-dependent, non-significant; corpus match is not the lever |
 | PyBugHive-black held-out | Baseline `23/34`, code_only `23/34`, structured `23/34` — neutral; patch layer is the bottleneck |
-| **Oracle ceiling (MBPP-holdout, Llama-3-8B)** | A perfect example lifts repair `64.7%`→`90.4%` (**+25.7, p<0.0001**); current retrieval captures ~none → **bottleneck is retrieval, not example exploitation**. Model-dependent: negligible for saturated gpt-4o-mini |
+| **Coverage vs ranking (planted-corpus, Llama-3-8B)** | Decomposition: baseline `64.7%` → best real example (`oracle_corpus`) `72.2%` (ranking headroom **+7.5pp, marginal**) → planted perfect example `86.6%` (coverage headroom **+14.4pp, large**). **Binding constraint is primarily corpus coverage**, with a smaller marginal ranking gap. Structured reranking is downstream-inert (= dense retrieval). (`oracle_self` +25.7 is a sanity check, not headroom.) |
 | RAGFix de-confounding | Their reported Llama-70B gain (`72.5`→`78.0`) is an import-postprocessing artifact; de-confounded RAG (`71.3%`) is *below* baseline (recomputed from their released CSVs) |
 | Determinism | Temperature-0 runs are deterministic (≤0.5% trial-to-trial flips); single-trial results representative |
 
@@ -264,12 +266,12 @@ If files are already tracked in Git, `.gitignore` will not remove them. Use
 
 Recommended title:
 
-> Better Retrieval, Same Repair: Why Relevance Gains Don't Convert in LLM Program Repair
+> Better Retrieval, Same Repair: Why Relevance Gains Don't Convert in Synthetic and Algorithmic LLM Program Repair
 
-(Alternative, if foregrounding the oracle ceiling + RAGFix correction:
-"The Retrieval Ceiling in LLM Program Repair: Relevance, Exploitation, and a
-Re-evaluation of Prior Gains".) "Structured Failure-Aware Retrieval" remains the
-name of the *method* inside the paper, not the title's promise.
+The scope qualifier is required — every executable result is synthetic/algorithmic, so
+the title must not promise general repair. "Structured Failure-Aware Retrieval" is the
+*method* name inside the paper; the positive contribution is the *finding* (corpus
+coverage dominates ranking; the relevance-proxy gain does not convert), not the method.
 
 Recommended framing (a critical empirical study, not a "method wins" paper):
 

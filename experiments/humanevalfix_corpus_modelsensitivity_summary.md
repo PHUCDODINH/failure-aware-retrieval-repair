@@ -316,3 +316,94 @@ saturated model the same perfect example yields only +3.2 (ns). This is exactly 
 knowledge-gap prediction and strengthens (does not contradict) the mechanism: examples
 help when the model lacks the knowledge, and current retrieval fails to surface
 sufficiently relevant ones. oracle_corpus headroom remains weak/borderline in both.
+
+## 13. Equivalence (TOST) + power / MDE (2026-06-03) — addresses "neutral != ns"
+
+Non-significance is not equivalence. For each null comparison: paired diff (treatment
+- baseline, pp), 90% CI, TOST equivalence verdict at +-5pp and +-10pp margins, and
+the minimum detectable effect at 80% power. Script: analysis/equivalence_power.py.
+
+| comparison | n | d (pp) | 90% CI (pp) | eq +-5 | eq +-10 | MDE (pp) |
+| --- | --- | ---: | --- | --- | --- | ---: |
+| HEF gpt-4o base->structured | 164 | -3.7 | [-6.8, -0.5] | no | YES | 5.4 |
+| HEF gpt-4.1 base->structured | 164 | -1.2 | [-4.1, +1.6] | YES | YES | 4.8 |
+| HEF gpt-4o-mini base->structured | 164 | -1.8 | [-6.0, +2.3] | no | YES | 7.0 |
+| HEF llama70b base->structured | 164 | -1.8 | [-6.2, +2.5] | no | YES | 7.4 |
+| MBPP llama8b base->structured | 187 | -0.5 | [-5.9, +4.8] | no | YES | 9.1 |
+| MBPP gpt4omini base->structured | 187 | -1.6 | [-4.5, +1.3] | YES | YES | 5.0 |
+| MBPP llama8b base->ORACLE_corpus | 187 | +7.5 | [+1.3, +13.6] | no | no | 10.6 |
+
+HONEST CLAIMS (replace "neutral" language):
+- We are NOT powered to claim equivalence at +-5pp (MDE 4.8-9.1pp); we CAN claim it
+  at +-10pp for structured-vs-baseline. So: "structured produces no conversion larger
+  than ~10pp; point estimates are neutral-to-slightly-negative (-0.5 to -3.7pp)."
+- gpt-4o leans slightly NEGATIVE (90% CI excludes 0 on Wald approx; exact McNemar
+  p=0.109). Do not call it "neutral"; call it "neutral-to-slightly-negative".
+- oracle_corpus 90% CI [+1.3,+13.6] excludes 0 (marginally positive) but is wide and
+  not equivalent at +-10pp; exact McNemar p=0.065. Report as marginal, wide.
+
+## 14. Full index audit (2026-06-03) — answers "what else is mislabeled?"
+
+Every `data/indexes/*` meta.jsonl audited (content signature + source field):
+
+| index | n | source | status |
+| --- | --- | --- | --- |
+| repair_clean, humaneval_clean, mbpp_clean, quixbugs_clean | 551 | bugsinpy | IDENTICAL (one duplicate group) |
+| repair_clean_holdout_pybughive_projects | 277 | bugsinpy | genuine (held-out) |
+| mbpp_real | 1041 | mbpp_synthetic | genuine |
+| mbpp_holdout | 508 | mbpp_synthetic | genuine |
+| mbpp_planted | 695 | mbpp_synthetic + planted_exact | genuine (diagnostic) |
+
+Verification: exactly ONE duplicate group (the 4 legacy `*_clean`, all BugsInPy). All
+other indexes carry a verified `source` field matching their intended content. No
+other mislabels. The paper used `repair_clean`/`repair_clean_holdout` (BugsInPy, the
+intended corpus) and the freshly-built genuine `mbpp_*` corpora.
+
+## 15. Planted-corpus experiment (2026-06-03) — resolves coverage-vs-ranking confound
+
+To separate corpus-coverage from retrieval-ranking, we planted each test problem's
+EXACT (buggy→fixed) pair into the corpus (`mbpp_planted`, 695 entries), guaranteeing a
+perfect example is present, then ran retrieval+repair on Llama-3-8B with traces.
+
+| condition | pass/187 | rate | vs baseline | planted-pair hit-rate (top-k) |
+| --- | ---: | ---: | --- | ---: |
+| baseline | 121 | 64.7% | — | — |
+| code_only / holdout | 122 | 65.2% | ns | — |
+| structured / holdout | 120 | 64.2% | ns | — |
+| code_only / PLANTED | 162 | 86.6% | +21.9, p<0.0001 | 100.0% |
+| structured / PLANTED | 162 | 86.6% | +21.9, p<0.0001 | 94.1% (demotes 11/187) |
+
+CONCLUSION (corrects the earlier "bottleneck is retrieval ranking" claim):
+1. The binding constraint is CORPUS COVERAGE, not retrieval ranking. When a
+   sufficiently-relevant example is present, both variants retrieve it and convert
+   (+21.9pp, highly significant). The realistic holdout corpus simply lacks such an
+   example (oracle_corpus best-available = +7.5 only).
+2. Structured reranking is downstream-INERT and slightly harmful to ranking:
+   structured = code_only on planted (86.6%), and structured DEMOTES the perfect
+   example in 11/187 cases (94.1% hit-rate vs code_only 100%). It adds nothing
+   because (a) realistic corpora rarely contain a good example, and (b) when they do,
+   plain dense retrieval already surfaces it.
+
+REVISED THESIS (honest, reviewer-aligned): structured failure-aware reranking
+significantly improves a relevance proxy but does not convert to repair, because the
+binding constraint is corpus coverage — the availability of a sufficiently-relevant
+example — not retrieval ranking. When no relevant example exists (the common case on
+realistic corpora) no reranker can help; when one exists, simple dense retrieval
+already finds it (and structured reranking can even demote it).
+
+## 16. Planted-corpus on a SECOND model (gpt-4o-mini) + decomposition (2026-06-03)
+
+| | Llama-3-8B (gap, base 64.7%) | gpt-4o-mini (saturated, base 93.0%) |
+| --- | --- | --- |
+| oracle_corpus (ranking headroom) | 72.2% (+7.5pp, p=0.065) | 94.7% (+1.6pp, ns) |
+| planted (total headroom) | 86.6% (+21.9pp, p<0.0001) | 94.1% (+1.1pp, ns) |
+| coverage headroom (planted - oracle_corpus) | +14.4pp | -0.5pp |
+
+Confirms the pattern is KNOWLEDGE-GAP-DEPENDENT: large coverage+ranking headroom for
+the gap model, ~0 for the saturated model (no gap -> nothing to gain from coverage OR
+ranking). HONEST LIMIT: gpt-4o-mini ceilings, so the large-magnitude decomposition
+(+21.9 total, +14.4 coverage) still rests on a SINGLE knowledge-gap model (Llama-8B,
+n=187). A second genuinely-knowledge-gapped model (another small model, or 8B on a
+harder benchmark) is still needed to show the magnitude is not 8B-specific. The
+reviewer's single-run concern is PARTIALLY addressed (mechanism direction confirmed;
+magnitude not yet replicated).

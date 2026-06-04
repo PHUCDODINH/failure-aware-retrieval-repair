@@ -12,23 +12,35 @@ Last updated 2026-06-03. Numbers traced to files in `experiments/`; significance
 
 Recommended paper title (critical empirical study, not a method-win paper):
 
-> **Better Retrieval, Same Repair: Why Relevance Gains Don't Convert in LLM Program Repair**
+> **Better Retrieval, Same Repair: Why Relevance Gains Don't Convert in Synthetic and Algorithmic LLM Program Repair**
 >
-> Alt: "The Retrieval Ceiling in LLM Program Repair: Relevance, Exploitation, and a
-> Re-evaluation of Prior Gains". "Structured Failure-Aware Retrieval" is the name of
-> the *method* inside the paper, not the title's promise.
+> The scope qualifier ("Synthetic and Algorithmic") is required: every executable
+> result is on synthetic/algorithmic benchmarks, so the title must not promise general
+> repair. "Structured Failure-Aware Retrieval" is the *method* name inside the paper,
+> not the title's promise. The positive contribution is the FINDING (coverage >
+> ranking; relevance proxy doesn't convert), not the method.
 
 We study **when retrieval-augmented LLM program repair helps, is neutral, or hurts**,
 and isolate the role of *retrieval relevance*. Final, statistically-grounded thesis:
 
-> Structured failure-aware reranking **significantly improves retrieval relevance**,
-> but this **does not convert to downstream repair gains** — across models, corpora,
-> and benchmarks, structured retrieval is statistically *neutral* on repair success.
-> The bottleneck is **retrieval quality, not the model's ability to exploit an
-> example**: a sufficiently relevant example significantly improves a knowledge-gap
-> model (oracle +25.7 pts), yet current retrieval surfaces none of that headroom. We
-> further show a published positive claim (RAGFix) is largely a post-processing
-> artifact.
+> Structured failure-aware reranking **significantly improves retrieval relevance**
+> (independent metric, Wilcoxon p=0.0001), but this **does not convert to downstream
+> repair gains**: across models and corpora on synthetic/algorithmic function-level
+> benchmarks, structured retrieval is **neutral-to-slightly-negative** (point
+> estimates -0.5 to -3.7 pp; equivalent to baseline within +-10 pp but NOT within
+> +-5 pp; minimum detectable effect 5-9 pp). A planted-corpus experiment shows the
+> binding constraint is **corpus coverage** (the availability of a sufficiently-
+> relevant example), **not** retrieval ranking or example exploitation: when a
+> perfect example is guaranteed present, both dense retrieval and structured retrieve
+> it and repair converts (+21.9 pp); when it is absent (the common case on realistic
+> corpora) no reranker can help; and structured reranking adds nothing over plain
+> dense retrieval (and can even demote the perfect example). We further show a
+> published positive claim (RAGFix) is **consistent with a post-processing artifact**
+> (controlled ablation pending).
+
+SCOPE: all executable evidence is on synthetic/algorithmic benchmarks (QuixBugs,
+HumanEvalFix, MBPP). Claims are scoped accordingly; realistic natural-bug executable
+repair is future work (see Part D).
 
 ### A.2 End-to-end pipeline
 
@@ -118,7 +130,13 @@ Dataset/benchmark provenance (cite):
 
 ## PART B — Results (all paper-usable)
 
-### B.1 Retrieval relevance — structured significantly more relevant
+### B.1 Retrieval relevance — structured improves a proxy (SETUP, not a "win")
+
+FRAMING: this is the *setup for the paper's puzzle*, not a standalone positive
+contribution. Structured significantly improves a relevance *proxy*, yet B.7a shows
+that improvement is downstream-hollow (no better best-example selection than plain
+dense retrieval, no conversion). Present B.1 and B.7a together: "we can improve a
+relevance proxy, and here is why that does not help."
 
 Tag-compatibility (top-5 Jaccard of repair-pattern tags vs ground truth):
 
@@ -206,24 +224,77 @@ Force the most fix-relevant example(s) and measure the repair ceiling.
 | ORACLE_corpus (best from disjoint corpus) | 94.7% (+1.6, ns) | 72.2% (+7.5, borderline p=0.065) |
 | ORACLE_self (exact fix pattern shown) | 96.3% (+3.2, ns) | **90.4% (+25.7, p<0.0001 ***)** |
 
-Interpretation:
-1. A relevant example **significantly** improves the knowledge-gap model (8B +25.7) —
-   so the model CAN exploit examples; exploitation is not the bottleneck.
-2. The ceiling is **model-dependent**: negligible for the saturated model (mini),
-   large for the knowledge-gap model (8B). Matches the knowledge-gap principle.
-3. Current retrieval (structured/code_only) captures ~none of this headroom →
-   bottleneck is retrieval quality.
-4. `oracle_corpus` (best real corpus example) is only borderline → part of the limit
-   is corpus coverage / the model needing near-exact examples. (oracle_corpus uses
-   the GT fix to select; it is an upper bound, not a deployable target.)
+Interpretation (stated conservatively):
+1. `oracle_self` (+25.7) is a **sanity check, not a headroom measurement** — it shows
+   the model the exact fix pattern for its own problem, so it mainly confirms the
+   model can use a near-identical example. It is NOT evidence of deployable headroom.
+2. The honest, deployable ceiling is `oracle_corpus` (best *real* corpus example):
+   +7.5 (90% CI [+1.3,+13.6], exact McNemar p=0.065) on 8B, negligible on gpt-4o-mini.
+   Marginal and wide — a thin ceiling.
+3. The ceiling is larger for the knowledge-gap model than the saturated one — this is
+   **consistent with** the knowledge-gap idea, but rests on two models, so we do NOT
+   call it a "principle".
+4. `oracle_corpus` being only marginal raised a confound: corpus-coverage vs
+   retrieval-ranking. Resolved by the planted-corpus experiment (B.7a).
+
+### B.7a Planted-corpus experiment — resolves the coverage-vs-ranking confound
+
+Plant each test problem's EXACT (buggy→fixed) pair into the corpus (`mbpp_planted`,
+695 entries), so a perfect example is GUARANTEED present. Llama-3-8B, with traces.
+
+| condition | rate | vs baseline | planted-pair top-k hit-rate |
+| --- | ---: | --- | ---: |
+| baseline | 64.7% | — | — |
+| code_only / holdout | 65.2% | ns | — |
+| structured / holdout | 64.2% | ns | — |
+| code_only / PLANTED | 86.6% | +21.9, p<0.0001 | 100% |
+| structured / PLANTED | 86.6% | +21.9, p<0.0001 | 94.1% (demotes 11) |
+
+DECOMPOSITION (state this explicitly — it is the strongest internal logic):
+- baseline 64.7%  →  oracle_corpus (best REAL example) 72.2%  →  planted (perfect
+  example) 86.6%.
+- **Ranking/selection headroom ≈ +7.5 pp** (oracle_corpus − baseline; marginal,
+  90% CI [+1.3,+13.6], p=0.065).
+- **Coverage headroom ≈ +14.4 pp** (planted − oracle_corpus; large).
+- => coverage is the DOMINANT constraint; ranking is a smaller MARGINAL one. The
+  honest claim is "**primarily corpus coverage, with a smaller marginal ranking
+  gap**" — NOT "coverage, not ranking" (our own oracle_corpus +7.5 contradicts the
+  absolute version).
+
+Structured reranking is downstream-inert (= code_only conversion, both 86.6%) and
+does NOT improve best-example selection over plain dense retrieval (hit-rate 94.1% ≤
+code_only 100%). CAVEAT on the 11 structured misses: these are largely a dense
+near-duplicate artifact — for `mutate_operator` bugs the corpus contains many
+near-identical buggy snippets, and the exact planted pair is not reliably at dense
+rank 0 in every run (embedding tie-cluster nondeterminism), so we do NOT claim a
+clean "reranker demotes the fix" pathology. The robust statement: structured's
+proxy-relevance gain does not yield better top-example selection or conversion.
 
 ### B.8 Statistical rigor
 
-- Significance: `experiments/analysis/significance_tests.py` (McNemar) +
-  `significance_mcnemar.json`. All downstream comparisons ns except `oracle_self`
-  (8B). Independent relevance significant (Wilcoxon p=0.0001).
-- Determinism: temperature-0 runs are deterministic (baseline 0 flips, structured
-  1/187 across trials) → single-trial results representative.
+- Significance (McNemar, `significance_tests.py`): all downstream comparisons ns
+  except `oracle_self` (8B). Independent relevance significant (Wilcoxon p=0.0001).
+- **Equivalence (TOST) + minimum detectable effect** (`equivalence_power.py`,
+  `equivalence_power.json`). d = structured − baseline (pp), 90% CI, TOST verdict at
+  ±5pp / ±10pp, MDE at 80% power:
+
+  | comparison | n | d (pp) | 90% CI (pp) | eq ±5 | eq ±10 | MDE (pp) |
+  | --- | --- | ---: | --- | --- | --- | ---: |
+  | HEF gpt-4o | 164 | -3.7 | [-6.8,-0.5] | no | YES | 5.4 |
+  | HEF gpt-4.1 | 164 | -1.2 | [-4.1,+1.6] | YES | YES | 4.8 |
+  | HEF gpt-4o-mini | 164 | -1.8 | [-6.0,+2.3] | no | YES | 7.0 |
+  | HEF llama70b | 164 | -1.8 | [-6.2,+2.5] | no | YES | 7.4 |
+  | MBPP llama8b | 187 | -0.5 | [-5.9,+4.8] | no | YES | 9.1 |
+  | MBPP gpt4omini | 187 | -1.6 | [-4.5,+1.3] | YES | YES | 5.0 |
+
+  Honest reading: equivalent within **±10pp** but NOT within **±5pp**; MDE 4.8-9.1pp.
+  ±10pp is a WIDE margin — "equivalent within ±10pp" only means "we cannot rule out
+  effects smaller than ~10pp" (weak equivalence). Point estimates are
+  neutral-to-slightly-negative (-0.5 to -3.7pp).
+- Near-determinism: temperature-0 re-run flips 0/187 (baseline) and 1/187 (structured)
+  → effectively but not strictly deterministic; single-trial results representative.
+  (Note: retrieval *pool ordering* can vary in near-duplicate tie-clusters — see
+  B.7a caveat — a separate, embedding-level effect from the pass/fail determinism.)
 
 ### B.9 Re-evaluation of RAGFix (IEEE BigData 2024) — de-confounding
 
@@ -238,10 +309,21 @@ reported figures).
 | 8B | baseline | 41.5% | — |
 | 8B | RAG (reported, excludes 4) | 48.8% (true) / 51.2% (reported) | +7.3 |
 
-RAGFix's 70B "gain" is an import-postprocessing artifact (ImportErrors 13→8→0);
-de-confounded RAG is *below* baseline. The 8B gain is real but inflated (excluded
-examples + retries). Caveat: this is inferential (different runs), not a controlled
-postprocessing on/off ablation.
+RAGFix's reported 70B gain is **consistent with an import-postprocessing artifact**:
+the only RAG run *without* import postprocessing (vdb-7-15) is 71.3%, *below* baseline
+(72.6%), and the reported 78% run adds import fixing (ImportErrors 13→8→0). The 8B
+gain is real but the reported 51.2% is computed over 160 (4 API-failed examples
+excluded); on the full 164 it is 48.8% (+7.3).
+
+IMPORTANT CAVEATS (state in paper; do NOT overclaim):
+- This is **inferential, not controlled**: vdb-7-15 and vdb-7-16 are *different runs*,
+  not a postprocessing on/off ablation on identical outputs. We cannot prove the gain
+  IS postprocessing, only that the data is *consistent with* it.
+- We do NOT allege intent in the example exclusion; we report the denominator
+  difference factually (160 vs 164) as a comparability issue.
+- A clean controlled ablation (their pipeline, postprocessing on/off) is needed to
+  make this a strong claim. Recommended framing: "the reported gain is consistent
+  with a post-processing artifact; a controlled ablation is required to confirm."
 
 ### B.10 Related-work differentiation
 
@@ -258,12 +340,12 @@ comparison infeasible: ReCode/InferFix closed-source; RAP-Gen is Java/JS.)
 
 | Paper claim | Evidence |
 | --- | --- |
-| Structured reranking improves retrieval relevance | B.1 (tag + independent metric, significant) |
-| Relevance does not convert to repair success | B.2-B.6 (all ns, multi-model/corpus/benchmark) |
-| Bottleneck is retrieval, not example exploitation | B.7 (oracle_self +25.7 sig; model exploits a relevant example) |
-| Ceiling follows the knowledge-gap principle | B.7 (model-dependent: large for 8B, negligible for saturated) |
-| Reported RAG-repair gains can be confounded | B.9 (RAGFix de-confounding) |
-| Results are statistically grounded | B.8 (McNemar, Wilcoxon, determinism) |
+| Structured reranking significantly improves retrieval relevance | B.1 (independent metric, Wilcoxon p=0.0001) |
+| Relevance does not convert to repair success (neutral-to-slightly-negative) | B.2-B.6 + equivalence/MDE (B.8/§13): no effect > ~10pp, point estimates -0.5 to -3.7pp |
+| Binding constraint is corpus coverage, NOT retrieval ranking | B.7a planted-corpus (+21.9pp when perfect example present; both variants retrieve+convert; structured demotes it in 11/187) |
+| Knowledge-gap ceiling is model-dependent (consistent with, not a "principle") | B.7 (2 models) |
+| Reported RAG-repair gains can be confounded | B.9 (RAGFix; inferential, "consistent with" postprocessing) |
+| Results are statistically grounded | B.8/§13 (McNemar, Wilcoxon, TOST+MDE, near-determinism) |
 
 ## PART D — Honest limitations (state in the paper)
 
