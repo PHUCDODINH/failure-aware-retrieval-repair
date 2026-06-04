@@ -8,12 +8,16 @@ The current research direction is:
 > Structured failure-aware reranking **significantly improves retrieval relevance**
 > (independent metric, p=0.0001), but this **does not convert to downstream repair
 > gains** — on synthetic/algorithmic benchmarks, structured retrieval is
-> **neutral-to-slightly-negative** (no effect larger than ~10 pp; MDE 5-9 pp). A
-> planted-corpus experiment localizes the binding constraint to **corpus coverage,
-> not retrieval ranking**: when a sufficiently-relevant example is guaranteed present,
-> repair converts (+21.9 pp) and plain dense retrieval already surfaces it, so
-> structured reranking adds nothing; when it is absent (the common case on realistic
-> corpora) no reranker can help.
+> **neutral-to-slightly-negative** (no effect larger than ~10 pp; MDE 4.8-9.1 pp;
+> gpt-4o borderline-negative). A planted-corpus experiment localizes the binding
+> constraint to **primarily corpus coverage; ranking headroom is small and
+> heterogeneous** — replicated on two gap models: coverage headroom +14.4 pp
+> (Llama-3-8B) / +13.4 pp (Qwen2.5-7B), both significant, vs ranking headroom +7.5 pp
+> (Llama) / −1.6 pp (Qwen, ns). When a sufficiently-relevant example is guaranteed
+> present, repair converts (+21.9 pp) and plain dense retrieval already surfaces it,
+> so structured reranking adds nothing (and selects the best example *less* often,
+> 94.1% vs 100%); when it is absent (the common case on realistic corpora) no reranker
+> can help.
 
 The intended paper framing is not "RAG always beats the baseline." The core claim is
 a critical, statistically-grounded characterization: explicit failure structure
@@ -118,7 +122,7 @@ Headline results (significance via `experiments/analysis/significance_tests.py`)
 | HumanEvalFix (gpt-4o/4.1/4o-mini/Llama-70B) | Structured is **statistically neutral** vs baseline (e.g. gpt-4o `132`→`126`, McNemar `p=0.11`, ns) — neither helps nor hurts |
 | Corpus ablation (HumanEvalFix) | BugsInPy vs genuine MBPP corpus: small, model-dependent, non-significant; corpus match is not the lever |
 | PyBugHive-black held-out | Baseline `23/34`, code_only `23/34`, structured `23/34` — neutral; patch layer is the bottleneck |
-| **Coverage vs ranking (planted-corpus, Llama-3-8B)** | Decomposition: baseline `64.7%` → best real example (`oracle_corpus`) `72.2%` (ranking headroom **+7.5pp, marginal**) → planted perfect example `86.6%` (coverage headroom **+14.4pp, large**). **Binding constraint is primarily corpus coverage**, with a smaller marginal ranking gap. Structured reranking is downstream-inert (= dense retrieval). (`oracle_self` +25.7 is a sanity check, not headroom.) |
+| **Coverage vs ranking (planted-corpus, 2 gap models)** | Decomposition baseline → best real example (`oracle_corpus`) → planted perfect example. **Coverage headroom +14.4pp (Llama-3-8B) / +13.4pp (Qwen2.5-7B)**, both significant; **ranking headroom +7.5pp (Llama) / −1.6pp (Qwen, ns)** — small and heterogeneous. **Binding constraint is primarily corpus coverage**; structured reranking is downstream-inert (= dense retrieval) and selects the best example less often (94.1% vs 100%). (`oracle_self` +25.7 is a sanity check, not headroom.) |
 | RAGFix de-confounding | Their reported Llama-70B gain (`72.5`→`78.0`) is an import-postprocessing artifact; de-confounded RAG (`71.3%`) is *below* baseline (recomputed from their released CSVs) |
 | Determinism | Temperature-0 runs are deterministic (≤0.5% trial-to-trial flips); single-trial results representative |
 

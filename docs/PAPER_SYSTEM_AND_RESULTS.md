@@ -27,16 +27,19 @@ and isolate the role of *retrieval relevance*. Final, statistically-grounded the
 > (independent metric, Wilcoxon p=0.0001), but this **does not convert to downstream
 > repair gains**: across models and corpora on synthetic/algorithmic function-level
 > benchmarks, structured retrieval is **neutral-to-slightly-negative** (point
-> estimates -0.5 to -3.7 pp; equivalent to baseline within +-10 pp but NOT within
-> +-5 pp; minimum detectable effect 5-9 pp). A planted-corpus experiment shows the
-> binding constraint is **corpus coverage** (the availability of a sufficiently-
-> relevant example), **not** retrieval ranking or example exploitation: when a
-> perfect example is guaranteed present, both dense retrieval and structured retrieve
-> it and repair converts (+21.9 pp); when it is absent (the common case on realistic
-> corpora) no reranker can help; and structured reranking adds nothing over plain
-> dense retrieval (and can even demote the perfect example). We further show a
-> published positive claim (RAGFix) is **consistent with a post-processing artifact**
-> (controlled ablation pending).
+> estimates -0.5 to -3.7 pp; the most capable model, gpt-4o, shows borderline small
+> harm; equivalent to baseline within +-10 pp but NOT within +-5 pp; minimum
+> detectable effect 4.8-9.1 pp). A planted-corpus experiment shows the binding
+> constraint is **primarily corpus coverage; ranking headroom is small and
+> heterogeneous**, replicated across two independent knowledge-gap models (table in
+> B.7a): coverage headroom +14.4 pp (Llama-3-8B) / +13.4 pp (Qwen2.5-7B) from planting
+> a perfect example (both significant), vs ranking headroom of +7.5 pp (Llama,
+> p=0.065) but −1.6 pp (Qwen, ns) from forcing the best *real* example — i.e. ranking
+> headroom is inconsistent (sometimes ~0/negative), which only strengthens "coverage
+> dominates." Structured reranking adds nothing over plain dense retrieval
+> downstream and selects the best example *less* often than dense retrieval (94.1% vs
+> 100%). We further show a published positive claim (RAGFix) is **consistent with a
+> post-processing artifact** (controlled ablation pending).
 
 SCOPE: all executable evidence is on synthetic/algorithmic benchmarks (QuixBugs,
 HumanEvalFix, MBPP). Claims are scoped accordingly; realistic natural-bug executable
@@ -169,7 +172,7 @@ is real and significant.
 Variance (5 trials, gpt-4o): baseline 89.5%, structured 91.0%, code_only 90.5% —
 OVERLAPPING. The QuixBugs structured "+2" is within noise; not a significant win.
 
-### B.3 HumanEvalFix model-sensitivity — statistically NEUTRAL
+### B.3 HumanEvalFix model-sensitivity — neutral-to-slightly-negative
 
 | Model | baseline | structured | McNemar p |
 | --- | ---: | ---: | ---: |
@@ -178,7 +181,10 @@ OVERLAPPING. The QuixBugs structured "+2" is within noise; not a significant win
 | gpt-4o-mini | 68.3% | 66.5% | 0.629 (ns) |
 | Llama-3.3-70B | 69.5% | 67.7% | 0.648 (ns) |
 
-The apparent "drops" are NOT significant → structured RAG is neutral, not harmful.
+The "drops" are not significant by exact McNemar (all ns), but every point estimate is
+negative and the most capable model (gpt-4o, -3.7) shows **borderline small harm**
+(see B.8 reconciliation). Honest reading: **neutral-to-slightly-negative**, not clean
+neutrality; structured never beats baseline and trends slightly negative.
 (Llama-3-8B raw collapsed to 8.5% but this was an output-format confound: 123/164
 syntax errors; the model could not format output under the longer RAG prompt.
 Corrected with robust extraction in the MBPP harness — see B.6.)
@@ -250,25 +256,39 @@ Plant each test problem's EXACT (buggy→fixed) pair into the corpus (`mbpp_plan
 | code_only / PLANTED | 86.6% | +21.9, p<0.0001 | 100% |
 | structured / PLANTED | 86.6% | +21.9, p<0.0001 | 94.1% (demotes 11) |
 
-DECOMPOSITION (state this explicitly — it is the strongest internal logic):
-- baseline 64.7%  →  oracle_corpus (best REAL example) 72.2%  →  planted (perfect
-  example) 86.6%.
-- **Ranking/selection headroom ≈ +7.5 pp** (oracle_corpus − baseline; marginal,
-  90% CI [+1.3,+13.6], p=0.065).
-- **Coverage headroom ≈ +14.4 pp** (planted − oracle_corpus; large).
-- => coverage is the DOMINANT constraint; ranking is a smaller MARGINAL one. The
-  honest claim is "**primarily corpus coverage, with a smaller marginal ranking
-  gap**" — NOT "coverage, not ranking" (our own oracle_corpus +7.5 contradicts the
-  absolute version).
+DECOMPOSITION (the strongest internal logic): baseline → oracle_corpus (best REAL
+example) → planted (perfect example). Ranking headroom = oracle_corpus − baseline;
+coverage headroom = planted − oracle_corpus. Replicated across two independent
+knowledge-gap models (Llama-3-8B, Qwen2.5-7B) plus a saturated control (gpt-4o-mini):
 
-Structured reranking is downstream-inert (= code_only conversion, both 86.6%) and
-does NOT improve best-example selection over plain dense retrieval (hit-rate 94.1% ≤
-code_only 100%). CAVEAT on the 11 structured misses: these are largely a dense
-near-duplicate artifact — for `mutate_operator` bugs the corpus contains many
-near-identical buggy snippets, and the exact planted pair is not reliably at dense
-rank 0 in every run (embedding tie-cluster nondeterminism), so we do NOT claim a
-clean "reranker demotes the fix" pathology. The robust statement: structured's
-proxy-relevance gain does not yield better top-example selection or conversion.
+| Model (base) | oracle_corpus | planted | ranking headroom | coverage headroom |
+| --- | ---: | ---: | ---: | ---: |
+| Llama-3-8B (64.7%) | 72.2% | 86.6% | **+7.5** (p=0.065) | **+14.4** (p<0.0001) |
+| Qwen2.5-7B (78.6%) | 77.0% | 90.4% | **−1.6** (ns) | **+13.4** (p=0.0001) |
+| gpt-4o-mini (93.0%, saturated) | 94.7% | 94.1% | +1.6 (ns) | −0.5 (ns) |
+
+(n=187 each; McNemar vs baseline. Qwen2.5-7B-Instruct-Turbo via Together.)
+
+- **Coverage headroom is large and significant on BOTH gap models (+14.4, +13.4)** and
+  ~0 on the saturated model. This is the robust, replicated result: corpus coverage
+  is the dominant binding constraint.
+- **Ranking headroom is HETEROGENEOUS and not robustly positive**: +7.5 (Llama,
+  marginal p=0.065) vs −1.6 (Qwen, ns — forcing the best real example slightly HURT).
+  So we do NOT claim a consistent "marginal ranking gap"; we claim ranking headroom is
+  small and inconsistent (sometimes ~0/negative), which only strengthens "coverage
+  dominates." We avoid averaging +7.5 and −1.6 into a single positive effect.
+- Honest claim: "**primarily corpus coverage; ranking headroom is small and
+  heterogeneous (+7.5 to −1.6 across models)**" — NOT "coverage, not ranking" (the
+  absolute version), and NOT "a consistent small ranking gap" (the +7.5-only version).
+
+ROBUST CLAIM (lead with this): structured reranking does NOT improve best-example
+selection over plain dense retrieval — when a perfect example is present, dense
+retrieval selects it 100% of the time (top-k) while structured selects it only 94.1%,
+and conversion is identical (both 86.6%). So structured's proxy-relevance gain (B.1)
+does not translate into better top-example selection or better repair; it slightly
+degrades selection. (The 100% dense hit-rate rules out "the example is hard to
+retrieve" — the reranking is what moves it. We do not over-specify the internal cause
+of the 6% degradation.)
 
 ### B.8 Statistical rigor
 
@@ -291,6 +311,11 @@ proxy-relevance gain does not yield better top-example selection or conversion.
   ±10pp is a WIDE margin — "equivalent within ±10pp" only means "we cannot rule out
   effects smaller than ~10pp" (weak equivalence). Point estimates are
   neutral-to-slightly-negative (-0.5 to -3.7pp).
+  RECONCILIATION (gpt-4o): the Wald 90% CI [-6.8,-0.5] excludes 0, but exact McNemar
+  p=0.109 (ns). These disagree because the discordant count is small (b=8, c=2, m=10),
+  where the normal approximation is unreliable; we defer to the EXACT test. Honest
+  presentation: gpt-4o shows **borderline small harm** (point estimate -3.7pp), i.e.
+  the "slightly-negative" end of neutral-to-slightly-negative — NOT clean neutrality.
 - Near-determinism: temperature-0 re-run flips 0/187 (baseline) and 1/187 (structured)
   → effectively but not strictly deterministic; single-trial results representative.
   (Note: retrieval *pool ordering* can vary in near-duplicate tie-clusters — see
@@ -340,22 +365,29 @@ comparison infeasible: ReCode/InferFix closed-source; RAP-Gen is Java/JS.)
 
 | Paper claim | Evidence |
 | --- | --- |
-| Structured reranking significantly improves retrieval relevance | B.1 (independent metric, Wilcoxon p=0.0001) |
-| Relevance does not convert to repair success (neutral-to-slightly-negative) | B.2-B.6 + equivalence/MDE (B.8/§13): no effect > ~10pp, point estimates -0.5 to -3.7pp |
-| Binding constraint is corpus coverage, NOT retrieval ranking | B.7a planted-corpus (+21.9pp when perfect example present; both variants retrieve+convert; structured demotes it in 11/187) |
+| Structured improves a relevance PROXY (setup, not a standalone win) | B.1 (independent metric, Wilcoxon p=0.0001) — see B.7a for why it is downstream-hollow |
+| Relevance does not convert to repair success (neutral-to-slightly-negative) | B.2-B.6 + equivalence/MDE (B.8): no effect > ~10pp (weak equiv.), point estimates -0.5 to -3.7pp; gpt-4o borderline-negative |
+| Binding constraint is PRIMARILY corpus coverage; ranking headroom small + heterogeneous | B.7a (table): replicated on 2 gap models — coverage headroom +14.4 (Llama-8B) / +13.4 (Qwen-7B), both significant; ranking headroom +7.5 (Llama) / −1.6 (Qwen), inconsistent; structured selects the best example less often than dense retrieval (94.1% vs 100%) |
 | Knowledge-gap ceiling is model-dependent (consistent with, not a "principle") | B.7 (2 models) |
 | Reported RAG-repair gains can be confounded | B.9 (RAGFix; inferential, "consistent with" postprocessing) |
-| Results are statistically grounded | B.8/§13 (McNemar, Wilcoxon, TOST+MDE, near-determinism) |
+| Results are statistically grounded | B.8 (McNemar, Wilcoxon, TOST+MDE, near-determinism) |
 
 ## PART D — Honest limitations (state in the paper)
 
 1. **External validity:** all executable results are algorithmic / synthetic
    (QuixBugs, HumanEvalFix, MBPP mutations); no natural/realistic executable repair.
-2. Oracle ceiling shown on MBPP synthetic bugs (2 models, 1 bug family).
-3. `oracle_corpus` headroom is borderline; the strong ceiling claim rests on
-   `oracle_self`.
-4. RAGFix de-confounding is inferential, single system.
+2. The coverage decomposition is shown on MBPP synthetic bugs, **2 knowledge-gap
+   models** (Llama-3-8B, Qwen2.5-7B) + 1 saturated control, **1 bug family** (synthetic
+   mutations). The coverage effect replicates across the two gap models; the bug-family
+   and benchmark scope is still narrow.
+3. We do NOT rest any claim on `oracle_self` (it is a sanity check; see B.7 pt 1). The
+   deployable retrieval signal is `oracle_corpus`, whose ranking headroom is small and
+   heterogeneous (+7.5 / −1.6). The robust, replicated claim is the COVERAGE headroom
+   (+14.4 / +13.4), not a ranking ceiling.
+4. RAGFix de-confounding is inferential (different runs, not a controlled
+   postprocessing on/off ablation), single system.
 5. Human blind relevance audit is tooled (`build_blind_audit.py`) but not yet
-   annotated; the relevance validation currently rests on the automated independent
-   metric.
+   annotated; the B.1 relevance gain currently rests on an automated proxy. The
+   PyBugHive relevance number (+110%) is tag-metric-only (no independent-metric
+   corroboration) and we note the tag metric overstates.
 6. QuixBugs downstream "+2" is within variance — not claimed as a win.

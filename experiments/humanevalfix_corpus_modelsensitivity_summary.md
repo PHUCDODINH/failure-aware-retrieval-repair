@@ -407,3 +407,20 @@ n=187). A second genuinely-knowledge-gapped model (another small model, or 8B on
 harder benchmark) is still needed to show the magnitude is not 8B-specific. The
 reviewer's single-run concern is PARTIALLY addressed (mechanism direction confirmed;
 magnitude not yet replicated).
+
+## 17. Decomposition REPLICATED on a second gap model (Qwen2.5-7B) (2026-06-03)
+
+Coverage-vs-ranking decomposition across three models (MBPP-holdout, n=187):
+
+| Model | base | oracle_corpus (rank headroom) | planted (coverage headroom) |
+| --- | ---: | --- | --- |
+| Llama-3-8B (gap) | 64.7% | 72.2% (+7.5, p=0.065) | 86.6% (coverage +14.4, p<0.0001) |
+| Qwen2.5-7B (gap) | 78.6% | 77.0% (-1.6, ns) | 90.4% (coverage +13.4, p=0.0001) |
+| gpt-4o-mini (saturated) | 93.0% | 94.7% (+1.6, ns) | 94.1% (coverage -0.5, ns) |
+
+CONCLUSION: the coverage>>ranking pattern REPLICATES across two independent
+knowledge-gap models of different architectures. Coverage headroom is large and
+significant on both (+14.4, +13.4); ranking headroom is marginal (+7.5) to zero/
+negative (-1.6). On the saturated model both vanish (no gap). This closes the
+single-model concern: the finding is not Llama-8B-specific. On Qwen the best REAL
+example does not help at all (-1.6), making "primarily corpus coverage" even cleaner.
