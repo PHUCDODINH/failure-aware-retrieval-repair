@@ -35,9 +35,11 @@ errors) and are the usable evidence.
 
 ## 3. Conclusions
 
-1. **Retrieval is net-neutral-to-harmful on HumanEvalFix** for every capable model
+1. **Retrieval is statistically NEUTRAL on HumanEvalFix** for every capable model
    tested (Llama-3.3-70B, gpt-4o-mini, gpt-4.1, gpt-4o), across both corpora and
-   both retrieval variants. No configuration beats the no-retrieval baseline.
+   both retrieval variants. The apparent -1 to -4 point "drops" are NOT significant
+   (McNemar p=0.11-0.73, all ns; see section 10) — so structured RAG neither helps
+   nor hurts here; it does not beat baseline and the negative deltas are within noise.
 2. **Corpus domain-match is a small, model-dependent, inconsistent effect.** An
    algorithmic corpus (MBPP) helps gpt-4o slightly over real-world repo bugs
    (BugsInPy) but hurts the 70B model. Corpus mismatch was a minor factor, not the
@@ -167,14 +169,150 @@ Instance-level relevance<->success (structured traces vs baseline outcomes):
 Conclusion: the positive regime does NOT exist in executable Python benchmarks for
 these models. Even with a genuine knowledge gap (8B 64.7% baseline), matched corpus,
 contamination control, and the output confound removed, structured retrieval is
-net-neutral and ties/loses to code_only. Mechanism: relevance is not the binding
-constraint; at 8B retrieval is active but a coin-flip, limited by the generator's
-ability to EXPLOIT an example, not by which example is retrieved. Structured
-reranking's proven relevance gains (QuixBugs 0.218->0.394) therefore do not convert
-downstream.
+net-neutral and ties/loses to code_only (McNemar: all ns; see section 10).
+
+NOTE (superseded by section 9): an earlier draft concluded the bottleneck was the
+generator's ability to EXPLOIT an example. The oracle experiment (section 9) REFUTES
+this — oracle_self reaches 90.4% (p<0.0001), proving the model exploits a relevant
+example readily. The bottleneck is RETRIEVAL (surfacing fix-relevant examples), not
+exploitation.
 
 Paper implication: the supportable thesis is NOT "our method improves repair." It
 is "structured failure-aware reranking improves retrieval relevance, but relevance
 does not convert to repair success because it is not the binding constraint" —
 demonstrated across models, corpora, and benchmarks, with a de-confounding
 re-evaluation of RAGFix's published positive claim.
+
+## 8. Independent relevance metric (2026-06-03) — defuses circularity
+
+The tag-compat metric shares its vocabulary/inference with the structured reranker's
+objective, so a structured win there is partly circular. Independent check
+(`experiments/analysis/independent_relevance.py`): relevance = cosine(embed(candidate
+fix-diff), embed(ground-truth fix-diff)). No variant optimizes for this.
+
+QuixBugs (n=40), cosine of fix-diff to GT fix-diff:
+
+| variant | top1 | top2 | top5 |
+| --- | ---: | ---: | ---: |
+| code_only | 0.251 | 0.230 | 0.207 |
+| raw_text | 0.210 | 0.208 | 0.192 |
+| raw_text_rerank | 0.248 | 0.227 | 0.198 |
+| structured | 0.265 | 0.256 | 0.234 |
+
+Structured wins on every cut on this independent metric -> the relevance gain is
+REAL, not a tag-vocabulary artifact. BUT magnitude is smaller: +13% top-5 here vs
++81% on tag-compat. Honest takeaway: structured retrieval is genuinely more
+fix-relevant, but the tag-compatibility metric overstates the effect size; report
+both.
+
+SIGNIFICANCE (top-5, structured vs code_only, paired over n=40 problems): mean diff
++0.0265, 95% bootstrap CI [+0.0156, +0.0374] (excludes 0); Wilcoxon p=0.0001;
+structured higher on 31/40, tie 1, lower 8. The relevance gain is statistically
+significant. (Caveat: single benchmark, n=40; PyBugHive independent metric not yet run.)
+
+## 9. Oracle / ceiling experiment (2026-06-03) — KEY RESULT
+
+Bounds what retrieval *could* achieve, decoupled from the reranker. Llama-3-8B,
+MBPP-holdout (187, contamination-controlled). `experiments/analysis/oracle_ceiling_mbpp.py`.
+
+| Condition | Pass/187 | Rate | Δ baseline |
+| --- | ---: | ---: | ---: |
+| baseline | 121 | 64.7% | — |
+| code_only | 122 | 65.2% | +0.5 |
+| structured | 120 | 64.2% | -0.5 |
+| ORACLE corpus (best fix-similar from disjoint corpus) | 135 | 72.2% | +7.5 |
+| ORACLE self (exact fix pattern shown) | 169 | 90.4% | +25.7 |
+
+Interpretation (with McNemar significance, section 10):
+1. The model CAN exploit a relevant example: oracle_self 90.4% (+25.7, p<0.0001).
+   This is the load-bearing, statistically-solid ceiling result. It refutes "weak
+   model can't use examples" and proves exploitation is NOT the bottleneck.
+2. oracle_corpus (+7.5) is only BORDERLINE vs baseline (McNemar p=0.065, NOT
+   significant at n=187), though it IS significantly above structured (p=0.024). So
+   "a fix-aware retriever could extract gains from this corpus" is SUGGESTIVE, not
+   conclusive; do not overstate it.
+3. The bottleneck is RETRIEVAL, inferred from: (a) the model exploits a perfect
+   example (oracle_self, solid) yet (b) current retrieval is net-neutral
+   (structured ~= code_only ~= baseline, all ns). Current retrieval is not surfacing
+   examples good enough to help.
+4. oracle_corpus uses the GROUND-TRUTH fix to rank candidates -> it is an UPPER BOUND
+   that a deployable retriever (which lacks the fix) may not reach; frame as ceiling,
+   not achievable target.
+
+REVISED THESIS: a relevant-enough example demonstrably and significantly improves
+weak-model repair (oracle_self), yet current retrieval — incl. structured reranking —
+does not help (all ns). So the bottleneck is retrieval quality, not example
+exploitation. The corpus-achievable headroom (oracle_corpus) is suggestive but
+borderline. Open problem: fix-aware retrieval. (Plus RAGFix de-confounding.)
+
+## 10. Statistical significance (2026-06-03) — McNemar paired tests
+
+Llama-3-8B / MBPP-holdout (n=187), exact two-sided McNemar on paired pass/fail:
+
+| Comparison | discordant b/c | p | verdict |
+| --- | --- | ---: | --- |
+| baseline vs code_only | 23/24 | 1.000 | ns |
+| baseline vs structured | 19/18 | 1.000 | ns |
+| code_only vs structured | 11/9 | 0.824 | ns |
+| baseline vs ORACLE_corpus | 18/32 | 0.065 | ns (borderline) |
+| baseline vs ORACLE_self | 8/56 | <0.0001 | *** |
+| structured vs ORACLE_corpus | 12/27 | 0.024 | * |
+
+Takeaways:
+- The downstream neutrality (structured ~= code_only ~= baseline) is statistically
+  confirmed (all ns) — solid. NOTE: the HumanEvalFix "drops" are ALSO ns (gpt-4o
+  base vs structured p=0.109), so structured is NEUTRAL, not harmful, on HumanEvalFix.
+- oracle_self gain is highly significant (model can exploit a perfect example).
+- oracle_corpus vs baseline is NOT significant (p=0.065); only significant vs the
+  structured method (p=0.024). Report honestly.
+- Independent relevance (structured vs code_only top-5, n=40): Wilcoxon p=0.0001,
+  bootstrap CI [+0.016,+0.037] — relevance gain IS significant.
+
+Full McNemar table across all paired comparisons: experiments/significance_mcnemar.json
+(script: experiments/analysis/significance_tests.py). All HumanEvalFix and corpus-
+ablation downstream comparisons are ns; only oracle_self is significant (***).
+
+GAPS this exposes / still open:
+- Significance only computed for MBPP-llama8b; not for HumanEvalFix/corpus-ablation
+  or the independent-relevance metric (n=40, no test).
+- All new runs are SINGLE-TRIAL (temperature 0 but APIs not fully deterministic);
+  only QuixBugs has a 5-trial variance study.
+- Oracle ceiling is a SINGLE (model, benchmark) cell, on SYNTHETIC MBPP mutations;
+  needs replication (e.g., gpt-4o-mini, QuixBugs/HumanEvalFix) and natural bugs.
+- RAGFix de-confounding is INFERENTIAL (vdb-7-15 vs vdb-7-16 are different runs, not
+  a controlled postprocessing on/off ablation); attribution rests on their note +
+  ImportError counts (13->8->0), not a clean experiment.
+- Realistic executable repair still untested; human blind audit (section tooling)
+  not yet annotated.
+
+## 11. Determinism / trial variance (2026-06-03)
+
+Temperature-0 re-run (trial2) vs trial1, Llama-3-8B MBPP-holdout:
+
+| condition | trial1 | trial2 | flips |
+| --- | ---: | ---: | ---: |
+| baseline | 121/187 | 121/187 | 0 (0.0%) |
+| structured | 120/187 | 121/187 | 1 (0.5%) |
+
+Runs are essentially deterministic at temperature 0. Single-trial results are
+representative; the small downstream deltas are stable, not undersampling noise.
+(The QuixBugs +-2 variance arose from its temperature-varied candidate strategies,
+which are not used here.) Resolves the multi-trial concern.
+
+## 12. Oracle ceiling REPLICATION on gpt-4o-mini (2026-06-03)
+
+Same oracle ladder on the saturated model, vs the knowledge-gap model. McNemar vs baseline.
+
+| Condition | gpt-4o-mini (base 93.0%) | Llama-8B (base 64.7%) |
+| --- | --- | --- |
+| code_only | 92.5% (ns) | 65.2% (ns) |
+| structured | 91.4% (ns) | 64.2% (ns) |
+| ORACLE_corpus | 94.7% (+1.6, ns p=0.45) | 72.2% (+7.5, borderline p=0.065) |
+| ORACLE_self | 96.3% (+3.2, ns p=0.07) | 90.4% (+25.7, *** p<0.0001) |
+
+The ceiling is MODEL-DEPENDENT and concentrated in the knowledge-gap regime: a
+perfect example helps significantly only for the weak model (8B +25.7 ***); for the
+saturated model the same perfect example yields only +3.2 (ns). This is exactly the
+knowledge-gap prediction and strengthens (does not contradict) the mechanism: examples
+help when the model lacks the knowledge, and current retrieval fails to surface
+sufficiently relevant ones. oracle_corpus headroom remains weak/borderline in both.

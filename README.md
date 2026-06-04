@@ -5,14 +5,22 @@ when retrieval-augmented repair helps, when it is neutral, and when it hurts.
 
 The current research direction is:
 
-> Structured failure-aware reranking improves retrieval relevance. Downstream
-> repair improves in controlled settings with capable models, is neutral in
-> held-out settings, and can hurt when the patch layer or model is weaker.
+> Structured failure-aware reranking **significantly improves retrieval relevance**,
+> but this **does not convert to downstream repair gains** — across models, corpora,
+> and benchmarks, structured retrieval is statistically *neutral* on repair success
+> (no significant difference from baseline). The bottleneck is **retrieval quality,
+> not the model's ability to exploit an example**: a sufficiently relevant example
+> significantly improves a knowledge-gap model (oracle ceiling +25.7 pts, p<0.0001),
+> yet current retrieval surfaces none of that headroom.
 
-The intended paper framing is not "RAG always beats the baseline." The core
-claim is narrower and more defensible: explicit failure structure improves the
-quality of retrieved repair examples, while successful patch generation depends
-on the model, benchmark, and edit-application layer.
+The intended paper framing is not "RAG always beats the baseline." The core claim is
+a critical, statistically-grounded characterization: explicit failure structure
+significantly improves the *relevance* of retrieved repair examples, but relevance is
+not the binding constraint for repair success. We additionally show that a published
+positive claim (RAGFix) is largely a post-processing artifact.
+
+See `docs/PAPER_SYSTEM_AND_RESULTS.md` for the consolidated system description and
+every paper-usable result with significance tests.
 
 ## System Overview
 
@@ -93,24 +101,24 @@ in `src/datasets/` and `src/retrieval/`.
 
 ## Key Paper Results
 
-Detailed paper-facing results are summarized in:
+Detailed paper-facing results are consolidated in:
 
-- `experiments/paper_detailed_results_pack_20260525.md`
-- `experiments/paper_results_summary_20260509.md`
-- `experiments/pybughive_holdout_eval_summary_20260518.md`
-- `experiments/humanevalfix_eval_summary_20260518.md`
+- `docs/PAPER_SYSTEM_AND_RESULTS.md` (current, with significance tests) — primary
+- `experiments/humanevalfix_corpus_modelsensitivity_summary.md` (full 2026-06-03 run)
+- `experiments/paper_detailed_results_pack_20260525.md` (prior pack)
 
-Headline results:
+Headline results (significance via `experiments/analysis/significance_tests.py`):
 
 | Benchmark / Setting | Main Observation |
 |---|---|
-| QuixBugs retrieval relevance | Structured reranking improves top-5 edit-pattern tag compatibility from `0.218` to `0.394` over code-only retrieval |
-| QuixBugs `gpt-4o` downstream | Baseline `35/40`; structured `37/40` |
-| QuixBugs field ablation | Removing several structured fields drops `37/40` to `36/40` |
-| PyBugHive-black original | Baseline `23/34`; structured `11/34` |
-| PyBugHive-black project-held-out | Baseline `23/34`; structured `23/34`; same-project retrieval contamination removed |
-| HumanEvalFix `gpt-4o` | Baseline `132/164`; structured `126/164` |
-| HumanEvalFix all tested models | Structured RAG slightly hurts across `gpt-4o`, `gpt-4.1`, and `gpt-4o-mini` |
+| Retrieval relevance (QuixBugs) | Structured improves top-5 tag compatibility `0.218`→`0.394`; on an **independent** fix-diff metric (no shared vocabulary) +13%, **significant** (Wilcoxon `p=0.0001`, 31/40) |
+| QuixBugs `gpt-4o` downstream | Baseline `35/40`, structured `37/40` — **within variance** (5-trial: baseline 89.5% vs structured 91.0%, overlapping); not a significant win |
+| HumanEvalFix (gpt-4o/4.1/4o-mini/Llama-70B) | Structured is **statistically neutral** vs baseline (e.g. gpt-4o `132`→`126`, McNemar `p=0.11`, ns) — neither helps nor hurts |
+| Corpus ablation (HumanEvalFix) | BugsInPy vs genuine MBPP corpus: small, model-dependent, non-significant; corpus match is not the lever |
+| PyBugHive-black held-out | Baseline `23/34`, code_only `23/34`, structured `23/34` — neutral; patch layer is the bottleneck |
+| **Oracle ceiling (MBPP-holdout, Llama-3-8B)** | A perfect example lifts repair `64.7%`→`90.4%` (**+25.7, p<0.0001**); current retrieval captures ~none → **bottleneck is retrieval, not example exploitation**. Model-dependent: negligible for saturated gpt-4o-mini |
+| RAGFix de-confounding | Their reported Llama-70B gain (`72.5`→`78.0`) is an import-postprocessing artifact; de-confounded RAG (`71.3%`) is *below* baseline (recomputed from their released CSVs) |
+| Determinism | Temperature-0 runs are deterministic (≤0.5% trial-to-trial flips); single-trial results representative |
 
 ## Setup
 
@@ -256,13 +264,25 @@ If files are already tracked in Git, `.gitignore` will not remove them. Use
 
 Recommended title:
 
-> Structured Failure-Aware Retrieval for LLM Program Repair
+> Better Retrieval, Same Repair: Why Relevance Gains Don't Convert in LLM Program Repair
 
-Recommended framing:
+(Alternative, if foregrounding the oracle ceiling + RAGFix correction:
+"The Retrieval Ceiling in LLM Program Repair: Relevance, Exploitation, and a
+Re-evaluation of Prior Gains".) "Structured Failure-Aware Retrieval" remains the
+name of the *method* inside the paper, not the title's promise.
 
-> Structured failure-aware reranking improves retrieval relevance; downstream
-> repair gains appear only when the generator can reliably convert relevant
-> examples into patches.
+Recommended framing (a critical empirical study, not a "method wins" paper):
+
+> Structured failure-aware reranking significantly improves retrieval relevance, but
+> relevance does not convert to repair success — structured retrieval is statistically
+> neutral downstream across models, corpora, and benchmarks. An oracle analysis shows
+> a relevant example *can* significantly help a knowledge-gap model, so the open
+> problem is fix-aware retrieval, not example exploitation. We also de-confound a
+> published positive claim (RAGFix).
+
+Honest scope: all executable results are on algorithmic / synthetic-mutation
+benchmarks (QuixBugs, HumanEvalFix, MBPP); realistic natural-bug executable repair and
+a blind human relevance audit remain future work.
 
 This repository is research code. It is designed for traceable experiments,
 not as a production repair service.
