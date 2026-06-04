@@ -109,6 +109,11 @@ corpora above were built fresh to avoid the mislabel.
 - **Models:** gpt-4o, gpt-4.1, gpt-4o-mini (OpenAI); Llama-3-8B-Instruct,
   Llama-3.3-70B-Instruct-Turbo (Together AI). Embeddings: local `all-MiniLM-L6-v2`.
 
+Dataset/benchmark provenance (cite):
+- HumanEvalFix — OctoPack (Muennighoff et al., 2023, arXiv:2308.07124).
+- QuixBugs (Lin et al., SPLASH 2017); MBPP (Austin et al., 2021, arXiv:2108.07732);
+  BugsInPy (Widyasari et al., ESEC/FSE 2020); PyBugHive (project source).
+
 ---
 
 ## PART B — Results (all paper-usable)

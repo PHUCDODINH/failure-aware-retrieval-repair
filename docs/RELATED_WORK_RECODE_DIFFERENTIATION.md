@@ -126,6 +126,24 @@ signal**, not head-to-head pass rates.
 
 ---
 
+## 5b. Other retrieval-augmented APR (cite, lighter contrast)
+
+- **RAP-Gen** (Wang et al., ESEC/FSE 2023; arXiv:2309.06057): hybrid lexical+semantic
+  patch retriever over bug-fix pairs + CodeT5 generator. Public code, but Java/JS
+  benchmarks (TFix, Code Refinement, Defects4J) — not directly comparable to our
+  Python setting. Cited as the originator of retrieval-augmented patch generation;
+  our `code_only` variant is an in-language instance of this paradigm.
+- **RELREPAIR / RelRepair** (2025; arXiv:2509.16701): retrieves relevant code
+  (function-signature / snippet level) to ground LLM repair; evaluated on Defects4J
+  (Java). Retrieval-then-generate, like ours, but static code retrieval rather than
+  failure-state-conditioned. Code availability not confirmed.
+- **RetypeR** (ICSME 2024): retrieval-based repair specialized to Python *type
+  errors*. Narrow scope (type errors only) vs our general function-level repair.
+
+These structure or ground retrieval by static code/signature properties; our signal
+is dynamic test-failure state. None reports the relevance-vs-conversion analysis or
+the oracle-ceiling analysis that are central here.
+
 ## 6. One-paragraph related-work draft
 
 > Recent work has begun to structure retrieval for program repair rather than
