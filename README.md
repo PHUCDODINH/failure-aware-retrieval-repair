@@ -5,9 +5,11 @@ when retrieval-augmented repair helps, when it is neutral, and when it hurts.
 
 The current research direction is:
 
-> Structured failure-aware reranking **significantly improves retrieval relevance**
-> (independent metric, p=0.0001), but this **does not convert to downstream repair
-> gains** — on synthetic/algorithmic benchmarks, structured retrieval is
+> Structured failure-aware reranking improves a **relevance proxy on QuixBugs**
+> (independent metric, p=0.0001) but the gain is **benchmark-specific** (does NOT
+> replicate on MBPP, p=0.41), and even where it holds it **does not convert to
+> downstream repair gains** — on synthetic/algorithmic benchmarks, structured
+> retrieval is
 > **neutral-to-slightly-negative** (no effect larger than ~10 pp; MDE 4.8-9.1 pp;
 > gpt-4o borderline-negative). A planted-corpus experiment localizes the binding
 > constraint to **primarily corpus coverage; ranking headroom is small and
@@ -117,7 +119,7 @@ Headline results (significance via `experiments/analysis/significance_tests.py`)
 
 | Benchmark / Setting | Main Observation |
 |---|---|
-| Retrieval relevance (QuixBugs) | Structured improves top-5 tag compatibility `0.218`→`0.394`; on an **independent** fix-diff metric (no shared vocabulary) +13%, **significant** (Wilcoxon `p=0.0001`, 31/40) |
+| Retrieval relevance (benchmark-specific) | Structured improves the independent fix-diff metric on QuixBugs (+13%, **Wilcoxon p=0.0001**, n=40) but this does **NOT replicate** on MBPP (−0.008, p=0.41, n=187). The one positive is fragile/benchmark-specific. |
 | QuixBugs `gpt-4o` downstream | Baseline `35/40`, structured `37/40` — **within variance** (5-trial: baseline 89.5% vs structured 91.0%, overlapping); not a significant win |
 | HumanEvalFix (gpt-4o/4.1/4o-mini/Llama-70B) | Structured is **statistically neutral** vs baseline (e.g. gpt-4o `132`→`126`, McNemar `p=0.11`, ns) — neither helps nor hurts |
 | Corpus ablation (HumanEvalFix) | BugsInPy vs genuine MBPP corpus: small, model-dependent, non-significant; corpus match is not the lever |
@@ -279,12 +281,17 @@ coverage dominates ranking; the relevance-proxy gain does not convert), not the 
 
 Recommended framing (a critical empirical study, not a "method wins" paper):
 
-> Structured failure-aware reranking significantly improves retrieval relevance, but
-> relevance does not convert to repair success — structured retrieval is statistically
-> neutral downstream across models, corpora, and benchmarks. An oracle analysis shows
-> a relevant example *can* significantly help a knowledge-gap model, so the open
-> problem is fix-aware retrieval, not example exploitation. We also de-confound a
-> published positive claim (RAGFix).
+> Structured failure-aware reranking improves a relevance proxy on QuixBugs, but the
+> gain is benchmark-specific (it does not replicate on MBPP) and does not convert to
+> repair success — structured retrieval is neutral-to-slightly-negative downstream
+> across models, corpora, and benchmarks. A planted-corpus experiment (replicated on
+> two low-base-accuracy models) localizes the binding constraint to **primarily corpus
+> coverage**: when a perfect example is guaranteed present repair converts and dense
+> retrieval already surfaces it, so reranking adds nothing; ranking headroom is small
+> and heterogeneous. The coverage result is shown only on synthetic mutations, where a
+> "perfect example" is constructible — its transfer to real bugs is the key open
+> question. We also note a published positive claim (RAGFix) is *consistent with* a
+> post-processing artifact (controlled ablation needed).
 
 Honest scope: all executable results are on algorithmic / synthetic-mutation
 benchmarks (QuixBugs, HumanEvalFix, MBPP); realistic natural-bug executable repair and

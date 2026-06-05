@@ -19,19 +19,31 @@ Recommended paper title (critical empirical study, not a method-win paper):
 > repair. "Structured Failure-Aware Retrieval" is the *method* name inside the paper,
 > not the title's promise. The positive contribution is the FINDING (coverage >
 > ranking; relevance proxy doesn't convert), not the method.
+>
+> TITLE-PREMISE CAVEAT: "Better Retrieval, Same Repair" takes "better retrieval" as a
+> given, but B.1 now shows the relevance gain holds on only 1 of 2 benchmarks (null on
+> MBPP). The premise is no longer safe to assert flatly. An honest alternative that
+> does not presuppose a robust relevance gain:
+>   "Relevance Without Repair: Retrieval Gains Are Fragile and Don't Convert in
+>    Synthetic and Algorithmic LLM Program Repair"
+> or "When Better Retrieval Isn't Better Repair: ...". Pick a title that does not bake
+> in "better retrieval" as established.
 
 We study **when retrieval-augmented LLM program repair helps, is neutral, or hurts**,
 and isolate the role of *retrieval relevance*. Final, statistically-grounded thesis:
 
-> Structured failure-aware reranking **significantly improves retrieval relevance**
-> (independent metric, Wilcoxon p=0.0001), but this **does not convert to downstream
+> Structured failure-aware reranking improves a relevance proxy on QuixBugs
+> (independent metric, p=0.0001) but **the gain does not robustly replicate** (null on
+> MBPP, p=0.41, the larger n=187 sample — so the QuixBugs positive may be the outlier),
+> and even where it holds it **does not convert to
+> downstream
 > repair gains**: across models and corpora on synthetic/algorithmic function-level
 > benchmarks, structured retrieval is **neutral-to-slightly-negative** (point
 > estimates -0.5 to -3.7 pp; the most capable model, gpt-4o, shows borderline small
 > harm; equivalent to baseline within +-10 pp but NOT within +-5 pp; minimum
 > detectable effect 4.8-9.1 pp). A planted-corpus experiment shows the binding
 > constraint is **primarily corpus coverage; ranking headroom is small and
-> heterogeneous**, replicated across two independent knowledge-gap models (table in
+> heterogeneous**, replicated across two independent low-base-accuracy models (table in
 > B.7a): coverage headroom +14.4 pp (Llama-3-8B) / +13.4 pp (Qwen2.5-7B) from planting
 > a perfect example (both significant), vs ranking headroom of +7.5 pp (Llama,
 > p=0.065) but −1.6 pp (Qwen, ns) from forcing the best *real* example — i.e. ranking
@@ -156,10 +168,28 @@ which shares nothing with the reranker objective (defuses circularity):
 | code_only | 0.251 | 0.230 | 0.207 |
 | structured | 0.265 | 0.256 | **0.234** |
 
-Significant: structured vs code_only top-5, n=40, mean diff +0.0265, 95% CI
-[+0.016,+0.037], Wilcoxon **p=0.0001**, structured higher on 31/40. The tag metric
-overstates the effect (+81%) relative to the independent metric (+13%), but the gain
-is real and significant.
+QuixBugs (n=40): structured vs code_only top-5 mean diff +0.0265, 95% CI
+[+0.016,+0.037], Wilcoxon **p=0.0001**, higher on 31/40. The tag metric overstates
+(+81%) vs the independent metric (+13%).
+
+**BUT this does NOT replicate on a second benchmark.** On MBPP-holdout (n=187,
+`independent_relevance_mbpp.py`): code_only top-5 0.464 vs structured 0.456, mean diff
+**-0.008 (slightly negative), 95% CI [-0.025,+0.009], Wilcoxon p=0.41 (ns)**.
+
+TWO COMPETING INTERPRETATIONS (state both; do NOT assert one as established):
+(a) **benchmark-specific** — the gain is real but depends on the bug distribution
+    (MBPP single-operator mutations give a thin failure signal so dense retrieval
+    already matches the near-identical buggy code). This mechanism is **post-hoc**,
+    constructed after seeing the split.
+(b) **not robust** (simpler, skeptic-preferred) — a positive on n=40 and a null on
+    **n=187**; the LARGER-sample null may be closer to the truth and the small-sample
+    positive the outlier.
+We cannot distinguish these from one positive + one null. Honest statement: the
+relevance gain **does not robustly replicate**; a skeptic can reasonably treat the
+n=187 null as the better estimate. Either way the "one clean positive" is now fragile,
+which sharpens the thesis (even the relevance proxy does not hold up, and where it
+does, B.7a shows it does not convert). NOTE: this also pressures the title premise
+("Better Retrieval, ...") — see A.1 title note.
 
 ### B.2 QuixBugs downstream (single attempt, k=2)
 
@@ -237,7 +267,7 @@ Interpretation (stated conservatively):
 2. The honest, deployable ceiling is `oracle_corpus` (best *real* corpus example):
    +7.5 (90% CI [+1.3,+13.6], exact McNemar p=0.065) on 8B, negligible on gpt-4o-mini.
    Marginal and wide — a thin ceiling.
-3. The ceiling is larger for the knowledge-gap model than the saturated one — this is
+3. The ceiling is larger for the low-base-accuracy models than the saturated one — this is
    **consistent with** the knowledge-gap idea, but rests on two models, so we do NOT
    call it a "principle".
 4. `oracle_corpus` being only marginal raised a confound: corpus-coverage vs
@@ -259,7 +289,7 @@ Plant each test problem's EXACT (buggy→fixed) pair into the corpus (`mbpp_plan
 DECOMPOSITION (the strongest internal logic): baseline → oracle_corpus (best REAL
 example) → planted (perfect example). Ranking headroom = oracle_corpus − baseline;
 coverage headroom = planted − oracle_corpus. Replicated across two independent
-knowledge-gap models (Llama-3-8B, Qwen2.5-7B) plus a saturated control (gpt-4o-mini):
+low-base-accuracy models (Llama-3-8B, Qwen2.5-7B) plus a saturated control (gpt-4o-mini):
 
 | Model (base) | oracle_corpus | planted | ranking headroom | coverage headroom |
 | --- | ---: | ---: | ---: | ---: |
@@ -365,7 +395,7 @@ comparison infeasible: ReCode/InferFix closed-source; RAP-Gen is Java/JS.)
 
 | Paper claim | Evidence |
 | --- | --- |
-| Structured improves a relevance PROXY (setup, not a standalone win) | B.1 (independent metric, Wilcoxon p=0.0001) — see B.7a for why it is downstream-hollow |
+| Structured improves a relevance PROXY but only on QuixBugs (benchmark-specific) | B.1: significant on QuixBugs (p=0.0001), null on MBPP (p=0.41); setup not a win; B.7a shows even where it holds it is downstream-hollow |
 | Relevance does not convert to repair success (neutral-to-slightly-negative) | B.2-B.6 + equivalence/MDE (B.8): no effect > ~10pp (weak equiv.), point estimates -0.5 to -3.7pp; gpt-4o borderline-negative |
 | Binding constraint is PRIMARILY corpus coverage; ranking headroom small + heterogeneous | B.7a (table): replicated on 2 gap models — coverage headroom +14.4 (Llama-8B) / +13.4 (Qwen-7B), both significant; ranking headroom +7.5 (Llama) / −1.6 (Qwen), inconsistent; structured selects the best example less often than dense retrieval (94.1% vs 100%) |
 | Knowledge-gap ceiling is model-dependent (consistent with, not a "principle") | B.7 (2 models) |
@@ -376,18 +406,34 @@ comparison infeasible: ReCode/InferFix closed-source; RAP-Gen is Java/JS.)
 
 1. **External validity:** all executable results are algorithmic / synthetic
    (QuixBugs, HumanEvalFix, MBPP mutations); no natural/realistic executable repair.
-2. The coverage decomposition is shown on MBPP synthetic bugs, **2 knowledge-gap
-   models** (Llama-3-8B, Qwen2.5-7B) + 1 saturated control, **1 bug family** (synthetic
-   mutations). The coverage effect replicates across the two gap models; the bug-family
-   and benchmark scope is still narrow.
+1a. **CONCEPTUAL FRAGILITY of the coverage thesis (name this explicitly):** the
+   planted-corpus experiment relies on a "perfect example" being *constructible* — an
+   exact buggy→fixed pair — which is only well-defined for **synthetic mutations**. On
+   real bugs the equivalent example rarely exists and "sufficiently relevant" is fuzzy.
+   So "coverage is the binding constraint" is closest to *definitionally* true in the
+   regime we tested and most fragile in the regime we did not. This is the single
+   biggest threat; only a realistic executable benchmark can resolve it.
+2. The coverage decomposition is shown on MBPP synthetic bugs, **2 models with low
+   base accuracy** (Llama-3-8B 64.7%, Qwen2.5-7B 78.6%) + 1 saturated control
+   (gpt-4o-mini 93.0%), **1 bug family**. FRAMING NOTE: prefer "headroom scales with
+   the fraction of currently-failed problems a perfect example would fix" over the
+   "knowledge-gap model" label — Qwen (78.6%) is close to gpt-4o (80.5%), so the
+   distinguishing variable is base accuracy, not an intrinsic "gap".
 3. We do NOT rest any claim on `oracle_self` (it is a sanity check; see B.7 pt 1). The
    deployable retrieval signal is `oracle_corpus`, whose ranking headroom is small and
    heterogeneous (+7.5 / −1.6). The robust, replicated claim is the COVERAGE headroom
    (+14.4 / +13.4), not a ranking ceiling.
 4. RAGFix de-confounding is inferential (different runs, not a controlled
    postprocessing on/off ablation), single system.
-5. Human blind relevance audit is tooled (`build_blind_audit.py`) but not yet
-   annotated; the B.1 relevance gain currently rests on an automated proxy. The
-   PyBugHive relevance number (+110%) is tag-metric-only (no independent-metric
-   corroboration) and we note the tag metric overstates.
+5. B.1 relevance gain is **benchmark-specific** (significant on QuixBugs, null on
+   MBPP) and the human blind audit (`build_blind_audit.py`) is tooled but unrun, so the
+   one positive rests on an automated proxy that does not robustly replicate. The
+   PyBugHive +110% is tag-metric-only (the metric we show overstates).
 6. QuixBugs downstream "+2" is within variance — not claimed as a win.
+7. **RAGFix (B.9) is a strategic exposure, not just a limitation:** we publicly
+   recompute another group's published positive and conclude it is likely a
+   post-processing artifact on different-run evidence. Well-caveated, but it invites a
+   hostile rebuttal from authors with their original environment. DECISION NEEDED:
+   keep as a headlined contribution, or demote to a short "prior gains may be
+   confounded; controlled ablation needed" note. Recommend the latter unless a
+   controlled on/off ablation is run.

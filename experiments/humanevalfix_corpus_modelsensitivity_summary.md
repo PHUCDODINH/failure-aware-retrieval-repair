@@ -424,3 +424,27 @@ significant on both (+14.4, +13.4); ranking headroom is marginal (+7.5) to zero/
 negative (-1.6). On the saturated model both vanish (no gap). This closes the
 single-model concern: the finding is not Llama-8B-specific. On Qwen the best REAL
 example does not help at all (-1.6), making "primarily corpus coverage" even cleaner.
+
+## 18. Independent relevance on a SECOND benchmark (MBPP-holdout) — does NOT replicate
+
+Per reviewer request, ran the vocabulary-independent fix-diff relevance metric on
+MBPP-holdout (n=187), to test whether B.1's QuixBugs relevance gain generalizes.
+
+| variant | top1 | top2 | top5 |
+| --- | ---: | ---: | ---: |
+| code_only | 0.560 | 0.515 | 0.464 |
+| raw_text_rerank | 0.561 | 0.540 | 0.508 |
+| structured | 0.551 | 0.499 | 0.456 |
+
+structured vs code_only top5: mean diff **-0.008** (slightly NEGATIVE), 95% CI
+[-0.025,+0.009] (includes 0), higher 80/187 lower 93, **Wilcoxon p=0.41 (ns)**.
+
+CONCLUSION: the B.1 relevance gain is BENCHMARK-SPECIFIC. Significant on QuixBugs
+(+0.0265, p=0.0001) but does NOT replicate on MBPP (ns, slightly negative). Likely
+because MBPP bugs are single-operator synthetic mutations with a thin failure signal,
+so dense retrieval already matches the near-identical buggy code and structured
+reranking has little to add. This WEAKENS the one positive contribution (relevance
+gain is not robust across benchmarks) but REINFORCES the overall thesis: even the
+relevance proxy improvement is fragile, and it does not convert downstream. The
+paper's contribution is the FINDING (coverage dominates; relevance proxy fragile +
+non-converting), not the method.
