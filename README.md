@@ -125,7 +125,8 @@ Headline results (significance via `experiments/analysis/significance_tests.py`)
 | Corpus ablation (HumanEvalFix) | BugsInPy vs genuine MBPP corpus: small, model-dependent, non-significant; corpus match is not the lever |
 | PyBugHive-black held-out | Baseline `23/34`, code_only `23/34`, structured `23/34` — neutral; patch layer is the bottleneck |
 | **Coverage vs ranking (planted-corpus, 2 gap models)** | Decomposition baseline → best real example (`oracle_corpus`) → planted perfect example. **Coverage headroom +14.4pp (Llama-3-8B) / +13.4pp (Qwen2.5-7B)**, both significant; **ranking headroom +7.5pp (Llama) / −1.6pp (Qwen, ns)** — small and heterogeneous. **Binding constraint is primarily corpus coverage**; structured reranking is downstream-inert (= dense retrieval) and selects the best example less often (94.1% vs 100%). (`oracle_self` +25.7 is a sanity check, not headroom.) |
-| RAGFix de-confounding | Their reported Llama-70B gain (`72.5`→`78.0`) is an import-postprocessing artifact; de-confounded RAG (`71.3%`) is *below* baseline (recomputed from their released CSVs) |
+| Real-bug transfer (PyBugHive black) | Planting a perfect example lifts real repo-bug repair `85.7%`→`96.4%` (converted all 4 baseline failures) — coverage **directionally** transfers to real bugs, but **underpowered** (McNemar p=0.375; only 4 failures). Powering blocked by an environment ceiling (C-extension projects won't build on Py3.7/ARM). |
+| RAGFix de-confounding | Their reported Llama-70B gain (`72.5`→`78.0`) is *consistent with* an import-postprocessing artifact; de-confounded RAG (`71.3%`) is *below* baseline (recomputed from released CSVs; inferential — controlled ablation needed) |
 | Determinism | Temperature-0 runs are deterministic (≤0.5% trial-to-trial flips); single-trial results representative |
 
 ## Setup
@@ -293,9 +294,10 @@ Recommended framing (a critical empirical study, not a "method wins" paper):
 > question. We also note a published positive claim (RAGFix) is *consistent with* a
 > post-processing artifact (controlled ablation needed).
 
-Honest scope: all executable results are on algorithmic / synthetic-mutation
-benchmarks (QuixBugs, HumanEvalFix, MBPP); realistic natural-bug executable repair and
-a blind human relevance audit remain future work.
+Honest scope: all *powered* executable results are on algorithmic / synthetic-mutation
+benchmarks (QuixBugs, HumanEvalFix, MBPP), plus one *underpowered* real-repo-bug data
+point (PyBugHive black) that is directionally positive. A powered real-bug result (and
+a blind human relevance audit) remain future work.
 
 This repository is research code. It is designed for traceable experiments,
 not as a production repair service.

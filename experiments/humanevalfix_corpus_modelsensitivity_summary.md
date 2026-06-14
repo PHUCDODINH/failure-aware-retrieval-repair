@@ -448,3 +448,43 @@ gain is not robust across benchmarks) but REINFORCES the overall thesis: even th
 relevance proxy improvement is fragile, and it does not convert downstream. The
 paper's contribution is the FINDING (coverage dominates; relevance proxy fragile +
 non-converting), not the method.
+
+## 19. REALISTIC repo bugs: PyBugHive black coverage test (2026-06-06)
+
+First test of whether the coverage finding transfers OUT of the synthetic regime, on
+real repo bugs (PyBugHive black, gpt-4o-mini, paper-primary). Planted corpus = 551
+BugsInPy filler + 34 exact black buggy→fixed pairs (full files, via git show).
+
+| Real black bugs (paired n=28) | pass | rate |
+| --- | ---: | ---: |
+| baseline | 24/28 | 85.7% |
+| structured / planted (perfect example present) | 27/28 | 96.4% (+10.7pp) |
+
+- Planting a perfect example converted ALL 4 baseline-failed cases (232,273,297,1493);
+  the patch layer DID apply them on large black files (softens "patch layer dominates").
+- DIRECTIONALLY POSITIVE: coverage appears to transfer to real bugs (unlike the MBPP
+  relevance null). BUT UNDERPOWERED: black baseline 85.7% leaves only 4 failures;
+  McNemar p=0.375 (ns); planted also lost 1 case baseline passed (b=1, c=4).
+- Black has too little headroom for a powered result. Need a lower-baseline project
+  (more failures) and/or pooling across projects. (6 of 34 black cases fail
+  checkout/install and are excluded → n=28.)
+
+### 19a. Realistic-benchmark environment ceiling (2026-06-06)
+
+Attempted to add real projects beyond black for headroom/power. ENVIRONMENT BLOCKED:
+- pandas, jax, freqtrade, spaCy: C-extension builds (numpy/cython/jaxlib) fail on
+  Python 3.7 / ARM macOS (e.g. numpy `setup.py bdist_wheel` error, mkl not found).
+- poetry: install needs pipx→uv→poetry==1.2.0, which errors on this machine
+  (uv fatal error); all 16 runs install-failed.
+- salt not cached; freqtrade/poetry/salt require cloning + heavy/old deps.
+- black is the ONLY substantial realistic project that runs cleanly here (its env was
+  pre-cached from prior project work). discord.py(2)/cookiecutter(1)/scrapy(1) are
+  too small to add power.
+
+CONSEQUENCE: the realistic-bug coverage evidence is black-only — a DIRECTIONAL
+POSITIVE transfer signal (planted converted all 4 baseline failures, 85.7%→96.4%),
+but UNDERPOWERED (p=0.375) because black's high baseline leaves only 4 failures, and
+we could not add lower-baseline projects for headroom due to the environment ceiling.
+Honest status: real-bug transfer is directionally supported but not statistically
+powered; a powered real-bug result needs a machine that can build the C-extension
+projects (Linux/x86 or Docker), which is future work.

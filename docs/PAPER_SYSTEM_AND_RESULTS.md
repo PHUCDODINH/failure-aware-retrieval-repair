@@ -50,12 +50,17 @@ and isolate the role of *retrieval relevance*. Final, statistically-grounded the
 > headroom is inconsistent (sometimes ~0/negative), which only strengthens "coverage
 > dominates." Structured reranking adds nothing over plain dense retrieval
 > downstream and selects the best example *less* often than dense retrieval (94.1% vs
-> 100%). We further show a published positive claim (RAGFix) is **consistent with a
-> post-processing artifact** (controlled ablation pending).
+> 100%). On REAL repo bugs (PyBugHive black), the coverage effect is **directionally
+> supported but underpowered** — planting a perfect example converted all 4 baseline
+> failures (85.7%→96.4%) but McNemar p=0.375 (a powered real-bug result is blocked by
+> an environment ceiling on building C-extension projects; see B.5/D.1a). We further
+> show a published positive claim (RAGFix) is **consistent with a post-processing
+> artifact** (controlled ablation pending).
 
-SCOPE: all executable evidence is on synthetic/algorithmic benchmarks (QuixBugs,
-HumanEvalFix, MBPP). Claims are scoped accordingly; realistic natural-bug executable
-repair is future work (see Part D).
+SCOPE: all *powered* executable evidence is on synthetic/algorithmic benchmarks
+(QuixBugs, HumanEvalFix, MBPP), plus ONE underpowered real-repo-bug data point
+(PyBugHive black, B.5) where the coverage effect is directionally positive. A powered
+real-bug result is future work (environment ceiling; see Part D).
 
 ### A.2 End-to-end pipeline
 
@@ -231,11 +236,34 @@ Corrected with robust extraction in the MBPP harness — see B.6.)
 Corpus domain-match is a small, model-dependent, inconsistent effect (helps gpt-4o
 slightly, hurts 70B); not significant; not the explanation for non-conversion.
 
-### B.5 PyBugHive-black repo-level
+### B.5 PyBugHive-black repo-level (REAL repo bugs)
 
-Original (contaminated corpus): baseline 23/34, all RAG ~11-12/34 (retrieval hurts).
-Project-held-out (contamination removed): baseline 23/34, code_only 23/34,
-structured 23/34 — neutral; large-file patch layer is the bottleneck there.
+Original full-repair eval (gpt-4o): baseline 23/34; project-held-out baseline/code_only/
+structured all 23/34 — neutral; large-file patch layer dominates full repair.
+
+REALISTIC-BUG COVERAGE TEST (gpt-4o-mini, 2026-06-06): the only realistic test of
+whether the coverage finding transfers OUT of the synthetic regime. Planted corpus =
+551 BugsInPy filler + 34 exact black buggy→fixed pairs (full files via git).
+
+| black (real bugs, paired n=28) | pass | rate |
+| --- | ---: | ---: |
+| baseline | 24/28 | 85.7% |
+| structured / planted (perfect example present) | 27/28 | 96.4% (+10.7pp) |
+
+- DIRECTIONALLY POSITIVE: planting a perfect example converted ALL 4 baseline failures
+  (232,273,297,1493), and the patch layer DID apply them on large files. Coverage
+  appears to transfer to real bugs — contrary to the MBPP-relevance null, and softening
+  "patch layer dominates."
+- UNDERPOWERED: McNemar p=0.375 (ns); black's 85.7% baseline leaves only 4 failures
+  (planted also lost 1 case baseline passed: b=1, c=4). Not a powered result.
+- ENVIRONMENT CEILING (why we could not power it): adding lower-baseline projects for
+  headroom is blocked — pandas/jax/freqtrade/spaCy fail C-extension builds on
+  Python 3.7/ARM; poetry's pipx/uv install errors; salt not cached. black is the only
+  realistic project that runs cleanly here. A POWERED real-bug decomposition needs
+  Linux/x86 or Docker to build those projects = future work.
+- Honest takeaway: real-bug coverage transfer is **directionally supported but not
+  statistically powered**; it lifts the work past "synthetic-only" without yet
+  resolving the synthetic-regime fragility named in D.1a.
 
 ### B.6 Positive-regime hunt: MBPP-holdout repair (contamination-controlled)
 
@@ -385,11 +413,46 @@ IMPORTANT CAVEATS (state in paper; do NOT overclaim):
 vs **ReCode** (CIKM'25, algorithm-type retrieval) and **InferFix** (FSE'23,
 static-analyzer bug-type retrieval): our signal is **dynamic failure state** (runtime
 test failure), orthogonal to their static signals; we contribute an explicit,
-ablatable reranking function and a human/independent-validated relevance analysis.
-Full analysis: `docs/RELATED_WORK_RECODE_DIFFERENTIATION.md`. (Direct numeric
-comparison infeasible: ReCode/InferFix closed-source; RAP-Gen is Java/JS.)
+ablatable reranking function and an independent-metric relevance analysis (the blind
+HUMAN audit is tooled but UNRUN — do not claim human validation). Full analysis:
+`docs/RELATED_WORK_RECODE_DIFFERENTIATION.md`. (Direct numeric comparison infeasible:
+ReCode/InferFix closed-source; RAP-Gen is Java/JS — so we cannot claim improvement
+over methods we cannot run.)
 
 ---
+
+### B.11 Cost / ROI analysis — structured RAG is cost-dominated for repair
+
+Measured prompt size from HumanEvalFix gpt-4o traces (n=164 each):
+
+| | input chars | ~input tokens | repair benefit |
+| --- | ---: | ---: | --- |
+| baseline (no retrieval) | 1,199 | ~300 | 132/164 |
+| structured RAG | 4,632 | ~1,158 | 126/164 |
+| **overhead** | **+3,434 (+286%)** | **+858/repair (~4x)** | **0 (slightly negative)** |
+
+Plus non-prompt costs structured adds: embedding model, FAISS index (memory/disk),
+per-query retrieval latency, reranking compute, corpus storage/maintenance, and longer
+generation. At gpt-4o input pricing (~$2.50/1M tok) the extra is ~$0.002/repair — small
+in absolute $, but a ~4x input-token multiplier + infra, for no accuracy return.
+
+ROI framing (a practical contribution reviewers value):
+1. **Negative ROI for reranking.** Structured RAG is *Pareto-dominated* by baseline for
+   repair on capable models: equal-or-worse accuracy at ~4x prompt cost + retrieval
+   infra. You pay more and get nothing (or a small loss).
+2. **Positive ROI lives in COVERAGE, not reranking.** A *relevant example* converts
+   failures (planted +14-22pp synthetic, +10.7pp directional on real bugs), but you get
+   that from corpus coverage (having the example), and plain dense retrieval already
+   surfaces it when present — reranking adds cost without surfacing-better. So the
+   actionable guidance: **spend the retrieval budget on corpus coverage/curation, not
+   on reranking sophistication.** The two are separable; only one has positive ROI.
+3. **Direction-of-cost contrast with ReCode** (which sold inference-cost *reduction*):
+   relevance-reranking moves cost the WRONG way — more tokens, no benefit.
+
+Honest caveat: absolute per-call $ is tiny (tinier still on gpt-4o-mini); the argument
+is "strictly dominated (more cost, no benefit)" + token/latency/infra footprint at
+scale, NOT "ruinously expensive." Source: prompt lengths from `experiments/traces/
+humanevalfix_{baseline,structured}_gpt4o_full_v1/`.
 
 ## PART C — Claim → evidence map
 
@@ -398,21 +461,28 @@ comparison infeasible: ReCode/InferFix closed-source; RAP-Gen is Java/JS.)
 | Structured improves a relevance PROXY but only on QuixBugs (benchmark-specific) | B.1: significant on QuixBugs (p=0.0001), null on MBPP (p=0.41); setup not a win; B.7a shows even where it holds it is downstream-hollow |
 | Relevance does not convert to repair success (neutral-to-slightly-negative) | B.2-B.6 + equivalence/MDE (B.8): no effect > ~10pp (weak equiv.), point estimates -0.5 to -3.7pp; gpt-4o borderline-negative |
 | Binding constraint is PRIMARILY corpus coverage; ranking headroom small + heterogeneous | B.7a (table): replicated on 2 gap models — coverage headroom +14.4 (Llama-8B) / +13.4 (Qwen-7B), both significant; ranking headroom +7.5 (Llama) / −1.6 (Qwen), inconsistent; structured selects the best example less often than dense retrieval (94.1% vs 100%) |
+| Coverage transfers to REAL repo bugs (directional, underpowered) | B.5: black 85.7%→96.4% planting a perfect example (converted all 4 baseline failures), McNemar p=0.375 ns; powering blocked by environment ceiling |
 | Knowledge-gap ceiling is model-dependent (consistent with, not a "principle") | B.7 (2 models) |
+| Structured RAG is cost-dominated for repair (negative ROI; spend on coverage not reranking) | B.11: ~4x prompt tokens (+858/repair) for 0 benefit; Pareto-dominated by baseline |
 | Reported RAG-repair gains can be confounded | B.9 (RAGFix; inferential, "consistent with" postprocessing) |
 | Results are statistically grounded | B.8 (McNemar, Wilcoxon, TOST+MDE, near-determinism) |
 
 ## PART D — Honest limitations (state in the paper)
 
-1. **External validity:** all executable results are algorithmic / synthetic
-   (QuixBugs, HumanEvalFix, MBPP mutations); no natural/realistic executable repair.
+1. **External validity:** the *powered* executable results are algorithmic / synthetic
+   (QuixBugs, HumanEvalFix, MBPP mutations). We add ONE real-repo-bug data point
+   (PyBugHive black, B.5) where the coverage effect is directionally positive but
+   underpowered (p=0.375).
 1a. **CONCEPTUAL FRAGILITY of the coverage thesis (name this explicitly):** the
    planted-corpus experiment relies on a "perfect example" being *constructible* — an
-   exact buggy→fixed pair — which is only well-defined for **synthetic mutations**. On
-   real bugs the equivalent example rarely exists and "sufficiently relevant" is fuzzy.
-   So "coverage is the binding constraint" is closest to *definitionally* true in the
-   regime we tested and most fragile in the regime we did not. This is the single
-   biggest threat; only a realistic executable benchmark can resolve it.
+   exact buggy→fixed pair — which is cleanest for **synthetic mutations**. On real bugs
+   it is fuzzier. PARTIALLY ADDRESSED: on real black bugs, planting the exact pair did
+   convert all baseline failures (B.5), so the mechanism is not purely a synthetic
+   artifact — but this is directional (underpowered), and a POWERED real-bug result is
+   blocked by an environment ceiling (pandas/jax/freqtrade/spaCy C-extension builds
+   fail on Python 3.7/ARM; poetry pipx/uv install fails; only black runs cleanly).
+   Resolving it fully needs Linux/x86 or Docker to build the C-extension projects =
+   future work. Still the single biggest threat.
 2. The coverage decomposition is shown on MBPP synthetic bugs, **2 models with low
    base accuracy** (Llama-3-8B 64.7%, Qwen2.5-7B 78.6%) + 1 saturated control
    (gpt-4o-mini 93.0%), **1 bug family**. FRAMING NOTE: prefer "headroom scales with
