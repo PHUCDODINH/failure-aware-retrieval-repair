@@ -53,9 +53,10 @@ and isolate the role of *retrieval relevance*. Final, statistically-grounded the
 > 100%). On REAL repo bugs (PyBugHive black), the coverage effect is **directionally
 > supported but underpowered** — planting a perfect example converted all 4 baseline
 > failures (85.7%→96.4%) but McNemar p=0.375 (a powered real-bug result is blocked by
-> an environment ceiling on building C-extension projects; see B.5/D.1a). We further
-> show a published positive claim (RAGFix) is **consistent with a post-processing
-> artifact** (controlled ablation pending).
+> an environment ceiling on building C-extension projects; see B.5/D.1a).
+
+(The RAGFix recompute is a SECONDARY NOTE, not a headlined contribution — see B.9;
+decision recorded in D.7.)
 
 SCOPE: all *powered* executable evidence is on synthetic/algorithmic benchmarks
 (QuixBugs, HumanEvalFix, MBPP), plus ONE underpowered real-repo-bug data point
@@ -379,7 +380,16 @@ of the 6% degradation.)
   (Note: retrieval *pool ordering* can vary in near-duplicate tie-clusters — see
   B.7a caveat — a separate, embedding-level effect from the pass/fail determinism.)
 
-### B.9 Re-evaluation of RAGFix (IEEE BigData 2024) — de-confounding
+### B.9 SECONDARY NOTE (demoted from contribution) — RAGFix recompute
+
+PAPER USE (decision 2026-08-04, resolves D.7): cite in **one or two sentences** in
+the discussion / related-work section — "a recomputation of RAGFix's released CSVs
+is consistent with its 70B gain being a post-processing artifact; a controlled
+ablation would be needed to confirm" — NOT as a headlined contribution, NOT in the
+abstract or contribution list, NOT as a claims-table row of its own. Rationale:
+the evidence is inferential (different runs, single system) and headlining it
+invites a rebuttal the coverage thesis does not need. The table below is retained
+for internal reference and reviewer response only.
 
 Recomputed pass@1 from RAGFix's released CSVs (validated: baselines match their
 reported figures).
@@ -464,7 +474,7 @@ humanevalfix_{baseline,structured}_gpt4o_full_v1/`.
 | Coverage transfers to REAL repo bugs (directional, underpowered) | B.5: black 85.7%→96.4% planting a perfect example (converted all 4 baseline failures), McNemar p=0.375 ns; powering blocked by environment ceiling |
 | Knowledge-gap ceiling is model-dependent (consistent with, not a "principle") | B.7 (2 models) |
 | Structured RAG is cost-dominated for repair (negative ROI; spend on coverage not reranking) | B.11: ~4x prompt tokens (+858/repair) for 0 benefit; Pareto-dominated by baseline |
-| Reported RAG-repair gains can be confounded | B.9 (RAGFix; inferential, "consistent with" postprocessing) |
+| (Secondary note only, not a paper claim) prior RAG-repair gains may be confounded | B.9 (RAGFix recompute; DEMOTED to a 1–2 sentence discussion note — see B.9 paper-use directive) |
 | Results are statistically grounded | B.8 (McNemar, Wilcoxon, TOST+MDE, near-determinism) |
 
 ## PART D — Honest limitations (state in the paper)
@@ -500,10 +510,9 @@ humanevalfix_{baseline,structured}_gpt4o_full_v1/`.
    one positive rests on an automated proxy that does not robustly replicate. The
    PyBugHive +110% is tag-metric-only (the metric we show overstates).
 6. QuixBugs downstream "+2" is within variance — not claimed as a win.
-7. **RAGFix (B.9) is a strategic exposure, not just a limitation:** we publicly
-   recompute another group's published positive and conclude it is likely a
-   post-processing artifact on different-run evidence. Well-caveated, but it invites a
-   hostile rebuttal from authors with their original environment. DECISION NEEDED:
-   keep as a headlined contribution, or demote to a short "prior gains may be
-   confounded; controlled ablation needed" note. Recommend the latter unless a
-   controlled on/off ablation is run.
+7. **RAGFix (B.9) — DECISION RESOLVED (2026-08-04): DEMOTED to a short note.** The
+   recompute is inferential (different runs, single system) and headlining it invited
+   a hostile rebuttal the coverage thesis does not need. In the paper it appears only
+   as a 1–2 sentence "prior gains may be confounded; controlled ablation needed"
+   remark in discussion/related work (see B.9 paper-use directive). Revisit only if
+   a controlled postprocessing on/off ablation is actually run.

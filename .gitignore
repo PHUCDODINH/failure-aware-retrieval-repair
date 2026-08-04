@@ -32,9 +32,16 @@ data/external_sources/
 data/*.index
 data/corpora/*.jsonl
 
+# Committed CI fixtures (small, reproducibility exception to the rules above)
+!data/ci/
+!data/ci/*
+
 # Raw/generated experiment outputs
 experiments/*
 !experiments/*.md
+!experiments/analysis/
+experiments/analysis/*
+!experiments/analysis/*.py
 !experiments/case_studies/
 !experiments/case_studies/**/*.md
 

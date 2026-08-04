@@ -1,0 +1,164 @@
+# Powered real-bug experiment: PyBugHive coverage decomposition on x86 CI.
+#
+# Runs baseline / structured-normal / structured-planted arms over all supported
+# PyBugHive cases (up to 116 across 10 projects). This is the experiment that was
+# blocked locally by the ARM/py3.7 environment ceiling (paper doc B.5/D.1a):
+# python:X.Y-bullseye containers on x86_64 runners build the C-extension projects
+# (pandas, spaCy, ...) that fail on the ARM host.
+#
+# Requires repo secret OPENAI_API_KEY. Trigger manually (Actions tab -> run
+# workflow). Rough cost with the default gpt-4o-mini: a few dollars.
+name: pybughive-powered
+
+on:
+  workflow_dispatch:
+    inputs:
+      model:
+        description: OpenAI model
+        default: gpt-4o-mini
+      projects:
+        description: Space-separated project list, or "all"
+        default: all
+      arms:
+        description: Arms to run (subset of "baseline structured_normal structured_planted")
+        default: baseline structured_normal structured_planted
+
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.matrix.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies (CPU torch)
+        run: |
+          pip install torch --index-url https://download.pytorch.org/whl/cpu
+          pip install -r requirements.txt
+      - name: Generate shard matrix
+        id: matrix
+        run: |
+          python src/eval/gen_pybughive_ci_matrix.py \
+            --dataset-json data/ci/pybughive_current.json \
+            --projects ${{ inputs.projects }} > matrix.json
+          echo "matrix=$(cat matrix.json)" >> "$GITHUB_OUTPUT"
+      - name: Build planted + filler-only corpora and FAISS indexes
+        run: |
+          PROJECTS='${{ inputs.projects }}'
+          EXTRA=""
+          if [ "$PROJECTS" != "all" ]; then EXTRA="--projects $PROJECTS"; fi
+          python src/datasets/build_pybughive_planted.py \
+            --dataset-json data/ci/pybughive_current.json \
+            --repo-cache-root ci_repo_cache \
+            --filler data/ci/bugsinpy_filler_551.jsonl.gz \
+            $EXTRA \
+            --output ci_indexes/pybh_all_planted_corpus.jsonl \
+            --index-dir ci_indexes/pybh_all_planted
+          python src/datasets/build_pybughive_planted.py \
+            --no-plants \
+            --filler data/ci/bugsinpy_filler_551.jsonl.gz \
+            --output ci_indexes/pybh_filler_only_corpus.jsonl \
+            --index-dir ci_indexes/pybh_filler_only
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pybh-indexes
+          path: |
+            ci_indexes/pybh_all_planted
+            ci_indexes/pybh_filler_only
+          retention-days: 14
+
+  evaluate:
+    needs: prepare
+    strategy:
+      fail-fast: false
+      matrix: ${{ fromJSON(needs.prepare.outputs.matrix) }}
+    name: eval ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    container: ${{ matrix.image }}
+    timeout-minutes: 350
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install uv + evaluator Python 3.12
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          export PATH="$HOME/.local/bin:$PATH"
+          uv python install 3.12
+          uv venv /opt/evalvenv --python 3.12
+          uv pip install --python /opt/evalvenv/bin/python torch --index-url https://download.pytorch.org/whl/cpu
+          uv pip install --python /opt/evalvenv/bin/python -r requirements.txt pipenv
+      - name: Install pipx (poetry shards)
+        if: ${{ matrix.needs_pipx }}
+        run: |
+          python -m pip install --user pipx
+          echo "$HOME/.local/bin" >> "$GITHUB_PATH"
+      - uses: actions/download-artifact@v4
+        with:
+          name: pybh-indexes
+          path: ci_indexes
+      - name: Run arms
+        run: |
+          set -x
+          mkdir -p results
+          COMMON="--model ${{ inputs.model }} --paper-primary \
+            --dataset-json data/ci/pybughive_current.json \
+            --repo-cache-root ci_repo_cache \
+            --projects ${{ matrix.project }} --issue-ids ${{ matrix.issue_ids }} \
+            --pipenv-bin /opt/evalvenv/bin/pipenv \
+            --install-timeout 2700 --test-timeout 900"
+          for ARM in ${{ inputs.arms }}; do
+            case "$ARM" in
+              baseline)
+                /opt/evalvenv/bin/python src/eval/evaluate_pybughive.py $COMMON \
+                  --mode baseline \
+                  --results-path "results/${{ matrix.name }}__baseline.json" ;;
+              structured_normal)
+                /opt/evalvenv/bin/python src/eval/evaluate_pybughive.py $COMMON \
+                  --mode rag --retrieval-variant structured \
+                  --retrieval-index-dir ci_indexes/pybh_filler_only \
+                  --results-path "results/${{ matrix.name }}__structured_normal.json" ;;
+              structured_planted)
+                /opt/evalvenv/bin/python src/eval/evaluate_pybughive.py $COMMON \
+                  --mode rag --retrieval-variant structured \
+                  --retrieval-index-dir ci_indexes/pybh_all_planted \
+                  --results-path "results/${{ matrix.name }}__structured_planted.json" ;;
+            esac
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: results-${{ matrix.name }}
+          path: results/
+          retention-days: 30
+
+  analyze:
+    needs: evaluate
+    if: always()
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: results-*
+          path: all_results
+          merge-multiple: true
+      - name: Pooled analysis
+        run: |
+          python experiments/analysis/pybughive_powered_analysis.py \
+            --results-dir all_results \
+            --output pybh_powered_summary.json \
+            --markdown pybh_powered_summary.md
+          cat pybh_powered_summary.md >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: powered-summary
+          path: |
+            pybh_powered_summary.json
+            pybh_powered_summary.md
+          retention-days: 90

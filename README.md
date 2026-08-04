@@ -24,8 +24,10 @@ The current research direction is:
 The intended paper framing is not "RAG always beats the baseline." The core claim is
 a critical, statistically-grounded characterization: explicit failure structure
 significantly improves the *relevance* of retrieved repair examples, but relevance is
-not the binding constraint for repair success. We additionally show that a published
-positive claim (RAGFix) is largely a post-processing artifact.
+not the binding constraint for repair success. (A recompute of RAGFix's released
+CSVs — consistent with their gain being a post-processing artifact — is kept as a
+brief secondary note only, demoted from a headlined contribution; see
+`docs/PAPER_SYSTEM_AND_RESULTS.md` B.9/D.7.)
 
 See `docs/PAPER_SYSTEM_AND_RESULTS.md` for the consolidated system description and
 every paper-usable result with significance tests.
@@ -126,7 +128,7 @@ Headline results (significance via `experiments/analysis/significance_tests.py`)
 | PyBugHive-black held-out | Baseline `23/34`, code_only `23/34`, structured `23/34` — neutral; patch layer is the bottleneck |
 | **Coverage vs ranking (planted-corpus, 2 gap models)** | Decomposition baseline → best real example (`oracle_corpus`) → planted perfect example. **Coverage headroom +14.4pp (Llama-3-8B) / +13.4pp (Qwen2.5-7B)**, both significant; **ranking headroom +7.5pp (Llama) / −1.6pp (Qwen, ns)** — small and heterogeneous. **Binding constraint is primarily corpus coverage**; structured reranking is downstream-inert (= dense retrieval) and selects the best example less often (94.1% vs 100%). (`oracle_self` +25.7 is a sanity check, not headroom.) |
 | Real-bug transfer (PyBugHive black) | Planting a perfect example lifts real repo-bug repair `85.7%`→`96.4%` (converted all 4 baseline failures) — coverage **directionally** transfers to real bugs, but **underpowered** (McNemar p=0.375; only 4 failures). Powering blocked by an environment ceiling (C-extension projects won't build on Py3.7/ARM). |
-| RAGFix de-confounding | Their reported Llama-70B gain (`72.5`→`78.0`) is *consistent with* an import-postprocessing artifact; de-confounded RAG (`71.3%`) is *below* baseline (recomputed from released CSVs; inferential — controlled ablation needed) |
+| RAGFix recompute (secondary note, demoted) | Their reported Llama-70B gain (`72.5`→`78.0`) is *consistent with* an import-postprocessing artifact; de-confounded RAG (`71.3%`) is *below* baseline (recomputed from released CSVs; inferential — controlled ablation needed). In the paper: a 1–2 sentence discussion note only, NOT a headlined contribution. |
 | Determinism | Temperature-0 runs are deterministic (≤0.5% trial-to-trial flips); single-trial results representative |
 
 ## Setup
@@ -291,8 +293,11 @@ Recommended framing (a critical empirical study, not a "method wins" paper):
 > retrieval already surfaces it, so reranking adds nothing; ranking headroom is small
 > and heterogeneous. The coverage result is shown only on synthetic mutations, where a
 > "perfect example" is constructible — its transfer to real bugs is the key open
-> question. We also note a published positive claim (RAGFix) is *consistent with* a
-> post-processing artifact (controlled ablation needed).
+> question.
+
+(RAGFix is deliberately absent from this framing: it is a 1–2 sentence secondary
+note in discussion/related work, demoted from a headlined contribution — see
+`docs/PAPER_SYSTEM_AND_RESULTS.md` B.9/D.7.)
 
 Honest scope: all *powered* executable results are on algorithmic / synthetic-mutation
 benchmarks (QuixBugs, HumanEvalFix, MBPP), plus one *underpowered* real-repo-bug data
