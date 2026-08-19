@@ -262,9 +262,36 @@ whether the coverage finding transfers OUT of the synthetic regime. Planted corp
   Python 3.7/ARM; poetry's pipx/uv install errors; salt not cached. black is the only
   realistic project that runs cleanly here. A POWERED real-bug decomposition needs
   Linux/x86 or Docker to build those projects = future work.
-- Honest takeaway: real-bug coverage transfer is **directionally supported but not
-  statistically powered**; it lifts the work past "synthetic-only" without yet
-  resolving the synthetic-regime fragility named in D.1a.
+- Honest takeaway (2026-06-06, SUPERSEDED — see B.5a): real-bug coverage transfer was
+  **directionally supported but not statistically powered**.
+
+### B.5a POWERED REAL-BUG REPLICATION (2026-08-19) — coverage does NOT transfer
+
+CI run #3 (repo Actions, id 32240158734; 4h40m; all 46 shards green): all 116
+supported PyBugHive cases, 10 projects, x86 per-version containers, gpt-4o-mini,
+paper-primary; arms baseline / structured_normal (filler-only corpus) /
+structured_planted (filler + all 116 exact pairs). 55 cases usable in all three
+arms (env exclusions dominated by jax, poetry, freqtrade, spaCy; usable ≈ black 26 +
+pandas 23 + 6 others).
+
+| pooled n=55 | pass | rate |
+| --- | ---: | ---: |
+| baseline | 42/55 | 76.4% |
+| structured_normal | 39/55 | 70.9% |
+| structured_planted | 39/55 | 70.9% |
+
+- Planted vs baseline: 4 converted, **7 regressed**, exact McNemar p=0.549 → NULL with
+  NEGATIVE point estimate (−5.5pp). structured_normal identical pooled totals.
+- Per-project: black 23/26 baseline AND planted (the June +3 did NOT reproduce on the
+  overlapping CI case set); pandas planted 12/23 < baseline 15/23 (planting HURT).
+- ADOPTED READING (now the paper's RQ4): **even guaranteed corpus coverage is not
+  sufficient on real repository bugs** — coverage binds on synthetic bugs, but
+  relieving it does not transfer; repository-scale mechanics (long files through the
+  line-range patch layer, broad/slow suites, multi-hunk fixes) intervene. A sharper
+  negative than the hypothesis under test; supersedes B.5's directional claim and
+  resolves the "powered realistic benchmark" open item with a powered null.
+- Caveats to state: 55/116 usable (env ceiling persists partially in CI); usable set
+  dominated by 2 projects; CI nondeterminism did not preserve the local black result.
 
 ### B.6 Positive-regime hunt: MBPP-holdout repair (contamination-controlled)
 
@@ -506,9 +533,16 @@ humanevalfix_{baseline,structured}_gpt4o_full_v1/`.
 4. RAGFix de-confounding is inferential (different runs, not a controlled
    postprocessing on/off ablation), single system.
 5. B.1 relevance gain is **benchmark-specific** (significant on QuixBugs, null on
-   MBPP) and the human blind audit (`build_blind_audit.py`) is tooled but unrun, so the
-   one positive rests on an automated proxy that does not robustly replicate. The
-   PyBugHive +110% is tag-metric-only (the metric we show overstates).
+   MBPP). The PyBugHive +110% is tag-metric-only (the metric we show overstates).
+   BLIND HUMAN AUDIT RUN (2026-08-19, resolves open item #2): 2 annotators ×
+   20 QuixBugs problems × 4 variants (worksheet_ann{1,2}.json, scored by
+   score_blind_audit.py). Per-variant human relevance: ann1 structured 60% >
+   rerank 50% > code_only 45% > raw_text 20%; ann2 structured 30% > code_only
+   25% = rerank 25% > raw_text 15%; agreed-subset structured 41.7% > code_only
+   28.6%. Structured DOMINATES code_only for both annotators (McNemar b=0 both);
+   paired significance only vs raw_text (ann1 c=9 b=1 p=0.021); κ=0.358 (fair),
+   raw agreement 70%. Framing: corroborates the direction of the QuixBugs gain,
+   does not independently establish it (n=20/variant; ann1 is an author).
 6. QuixBugs downstream "+2" is within variance — not claimed as a win.
 7. **RAGFix (B.9) — DECISION RESOLVED (2026-08-04): DEMOTED to a short note.** The
    recompute is inferential (different runs, single system) and headlining it invited
