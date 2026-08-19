@@ -23,6 +23,11 @@ on:
         description: Arms to run (subset of "baseline structured_normal structured_planted")
         default: baseline structured_normal structured_planted
 
+# Secret needed by evaluate; also exported at workflow level because the src
+# import chain expects it (kept import-safe via a placeholder fallback).
+env:
+  OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+
 jobs:
   prepare:
     runs-on: ubuntu-latest

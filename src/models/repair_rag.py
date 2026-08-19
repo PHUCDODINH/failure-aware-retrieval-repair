@@ -75,8 +75,10 @@ def _strip_code_fences(text: str) -> str:
 # ============================================================================
 # OpenAI client
 # ============================================================================
+# Placeholder key keeps import safe in keyless contexts (matrix generation,
+# corpus building, --list-supported); real API calls still require a key.
 client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY"),
+    api_key=os.getenv("OPENAI_API_KEY") or "KEY_NOT_SET",
     base_url=os.getenv("OPENAI_BASE_URL") or None,
     max_retries=0,
 )

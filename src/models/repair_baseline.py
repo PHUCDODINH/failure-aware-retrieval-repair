@@ -19,8 +19,10 @@ from src.models.patch_utils import (
 # so a per-run OPENAI_API_KEY / OPENAI_BASE_URL can target another provider)
 load_dotenv(override=False)
 
+# Placeholder key keeps import safe in keyless contexts (matrix generation,
+# corpus building, --list-supported); real API calls still require a key.
 client = OpenAI(
-    api_key=os.getenv("OPENAI_API_KEY"),
+    api_key=os.getenv("OPENAI_API_KEY") or "KEY_NOT_SET",
     base_url=os.getenv("OPENAI_BASE_URL") or None,
     max_retries=0,
 )
