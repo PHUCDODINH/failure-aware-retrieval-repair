@@ -47,6 +47,8 @@ experiments/analysis/*
 # Archived CI per-case results cited by the paper
 !experiments/ci_run3_results/
 !experiments/ci_run3_results/*.json
+!experiments/ci_run4_results/
+!experiments/ci_run4_results/*.json
 
 # Backups and logs
 backups/

@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-14922",
+    "repository": "pandas",
+    "issue_id": 14922,
+    "file_path": "pandas/core/algorithms.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "pandas-14776",
+    "repository": "pandas",
+    "issue_id": 14776,
+    "file_path": "pandas/core/groupby.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[PATCH REJECTED]\noriginal text mismatch at lines 812-812"
+  }
+]

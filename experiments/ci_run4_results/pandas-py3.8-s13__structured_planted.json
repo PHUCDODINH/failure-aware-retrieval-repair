@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-14617",
+    "repository": "pandas",
+    "issue_id": 14617,
+    "file_path": "pandas/core/frame.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[PATCH REJECTED]\noriginal text mismatch at lines 2141-2141"
+  },
+  {
+    "case_id": "pandas-14580",
+    "repository": "pandas",
+    "issue_id": 14580,
+    "file_path": "pandas/core/indexing.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[PATCH REJECTED]\noriginal text mismatch at lines 1204-1204"
+  }
+]

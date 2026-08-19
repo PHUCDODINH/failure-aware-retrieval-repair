@@ -1,0 +1,46 @@
+[
+  {
+    "case_id": "black-2254",
+    "repository": "black",
+    "issue_id": 2254,
+    "file_path": "src/black/comments.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "black-1812",
+    "repository": "black",
+    "issue_id": 1812,
+    "file_path": "src/black/__init__.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[PATCH REJECTED]\noriginal text mismatch at lines 1001-1001"
+  },
+  {
+    "case_id": "black-1596",
+    "repository": "black",
+    "issue_id": 1596,
+    "file_path": "src/black/__init__.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.7.17, pytest-6.2.5, py-1.11.0, pluggy-1.2.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/black-1596\ncollected 0 items / 1 error\n==================================== ERRORS ====================================\n_____________________ ERROR collecting tests/test_black.py _____________________\ntests/test_black.py:36: in <module>\n    import black\nsrc/black/__init__.py:4288: in <module>\n    class StringParser:\nsrc/black/__init__.py:4333: in StringParser\n    (START, token.DOT): DOT,\nE   NameError: name 'DOT' is not defined\n=========================== short test summary info ============================\nERROR tests/test_black.py - NameError: name 'DOT' is not defined\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n=============================== 1 error in 0.40s ==============================="
+  },
+  {
+    "case_id": "black-1493",
+    "repository": "black",
+    "issue_id": 1493,
+    "file_path": "src/black/__init__.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  }
+]

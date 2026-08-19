@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-15348",
+    "repository": "pandas",
+    "issue_id": 15348,
+    "file_path": "pandas/core/reshape.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "pandas-15277",
+    "repository": "pandas",
+    "issue_id": 15277,
+    "file_path": "pandas/core/generic.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[PATCH REJECTED]\noriginal text mismatch at lines 2004-2004"
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-15021",
+    "repository": "pandas",
+    "issue_id": 15021,
+    "file_path": "pandas/tseries/resample.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "pandas-14973",
+    "repository": "pandas",
+    "issue_id": 14973,
+    "file_path": "pandas/indexes/base.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14973\ncollected 148 items\npandas/tests/indexes/test_numeric.py ..................F................ [ 23%]\n..............................................F......................... [ 72%]\n.........................................                                [100%]\n=================================== FAILURES ===================================\n_______________________ TestFloat64Index.test_duplicates _______________________\nself = <pandas.tests.indexes.test_numeric.TestFloat64Index testMethod=test_duplicates>\n    def test_duplicates(self):\n        for ind in self.indices.values():\n            if not len(ind):\n                continue\n            if isinstance(ind, MultiIndex):\n                continue\n            idx = self._holder([ind[0]] * 5)\n            self.assertFalse(idx.is_unique)\n>           self.assertTrue(idx.has_duplicates)\npandas/tests/indexes/common.py:288:\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\nself = Float64Index([1.5, 1.5, 1.5, 1.5, 1.5], dtype='float64')\n    @property\n    def has_duplicates(self):\n>       return self._engine.has_duplicates"
+  }
+]

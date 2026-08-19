@@ -1,0 +1,13 @@
+[
+  {
+    "case_id": "pandas-16466",
+    "repository": "pandas",
+    "issue_id": 16466,
+    "file_path": "pandas/core/reshape/tile.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-16466\nconfigfile: setup.cfg\ncollected 35 items\npandas/tests/reshape/test_tile.py FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF    [100%]\n=================================== FAILURES ===================================\n_____________________________ TestCut.test_simple ______________________________\nself = <pandas.tests.reshape.test_tile.TestCut object at 0x7fa43d70bdf0>\n    def test_simple(self):\n        data = np.ones(5, dtype='int64')\n>       result = cut(data, 4, labels=False)\npandas/tests/reshape/test_tile.py:21:\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\nx = array([1, 1, 1, 1, 1]), bins = 4, right = True, labels = False\nretbins = False, precision = 3, include_lowest = False\n    def cut(x, bins, right=True, labels=None, retbins=False, precision=3,\n            include_lowest=False):\n>       x_is_series, series_index, name, x = _preprocess_for_cut(x)\nE       NameError: name '_preprocess_for_cut' is not defined\npandas/core/reshape/tile.py:3: NameError\n______________________________ TestCut.test_bins _______________________________\nself = <pandas.tests.reshape.test_tile.TestCut object at 0x7fa43d70bf40>\n    def test_bins(self):\n        data = np.array([.2, 1.4, 2.5, 6.2, 9.7, 2.1])"
+  }
+]

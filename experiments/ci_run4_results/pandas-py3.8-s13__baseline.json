@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-14617",
+    "repository": "pandas",
+    "issue_id": 14617,
+    "file_path": "pandas/core/frame.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[PATCH REJECTED]\noriginal text mismatch at lines 2141-2141"
+  },
+  {
+    "case_id": "pandas-14580",
+    "repository": "pandas",
+    "issue_id": 14580,
+    "file_path": "pandas/core/indexing.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14580\ncollected 142 items\npandas/tests/test_categorical.py ....................................... [ 27%]\n.....................................................................F.. [ 78%]\n...............................                                          [100%]\n=================================== FAILURES ===================================\n_________ TestCategoricalAsBlock.test_dt_accessor_api_for_categorical __________\nself = <pandas.tests.test_categorical.TestCategoricalAsBlock testMethod=test_dt_accessor_api_for_categorical>\n    def test_dt_accessor_api_for_categorical(self):\n        # https://github.com/pandas-dev/pandas/issues/10661\n        from pandas.tseries.common import Properties\n        from pandas.tseries.index import date_range, DatetimeIndex\n        from pandas.tseries.period import period_range, PeriodIndex\n        from pandas.tseries.tdi import timedelta_range, TimedeltaIndex\n        s_dr = Series(date_range('1/1/2015', periods=5, tz=\"MET\"))\n        c_dr = s_dr.astype(\"category\")\n        s_pr = Series(period_range('1/1/2015', freq='D', periods=5))\n        c_pr = s_pr.astype(\"category\")\n        s_tdr = Series(timedelta_range('1 days', '10 days'))\n        c_tdr = s_tdr.astype(\"category\")\n        test_data = [\n            (\"Datetime\", DatetimeIndex._datetimelike_ops, s_dr, c_dr),\n            (\"Period\", PeriodIndex._datetimelike_ops, s_pr, c_pr),"
+  }
+]

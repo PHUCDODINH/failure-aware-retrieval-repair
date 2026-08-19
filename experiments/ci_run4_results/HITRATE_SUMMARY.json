@@ -1,0 +1,470 @@
+{
+  "run_id": 32270318888,
+  "hit_rate": 0.7611940298507462,
+  "n": 67,
+  "per_case": {
+    "black-111": {
+      "hit": true,
+      "retrieved": [
+        "bugsinpy:black:21:black.py",
+        "PLANT_black-111"
+      ]
+    },
+    "black-130": {
+      "hit": false,
+      "retrieved": [
+        "bugsinpy:black:19:black.py",
+        "PLANT_black-183"
+      ]
+    },
+    "black-132": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_black-132",
+        "PLANT_black-95"
+      ]
+    },
+    "black-133": {
+      "hit": false,
+      "retrieved": [
+        "bugsinpy:black:19:black.py",
+        "PLANT_black-183"
+      ]
+    },
+    "black-141": {
+      "hit": false,
+      "retrieved": [
+        "bugsinpy:black:19:black.py",
+        "PLANT_black-183"
+      ]
+    },
+    "black-1493": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_black-1596",
+        "PLANT_black-1493"
+      ]
+    },
+    "black-154": {
+      "hit": false,
+      "retrieved": [
+        "bugsinpy:black:19:black.py",
+        "PLANT_black-183"
+      ]
+    },
+    "black-1596": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_black-1596",
+        "PLANT_black-1493"
+      ]
+    },
+    "black-1812": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_black-1812",
+        "PLANT_black-1596"
+      ]
+    },
+    "black-183": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_black-185",
+        "PLANT_black-183"
+      ]
+    },
+    "black-185": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_black-185",
+        "PLANT_black-183"
+      ]
+    },
+    "black-193": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_black-215",
+        "PLANT_black-193"
+      ]
+    },
+    "black-215": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_black-215",
+        "PLANT_black-193"
+      ]
+    },
+    "black-224": {
+      "hit": false,
+      "retrieved": [
+        "PLANT_black-238",
+        "PLANT_black-234"
+      ]
+    },
+    "black-2254": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_black-2254",
+        "PLANT_black-74"
+      ]
+    },
+    "black-232": {
+      "hit": false,
+      "retrieved": [
+        "bugsinpy:black:17:black.py",
+        "PLANT_black-297"
+      ]
+    },
+    "black-234": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_black-238",
+        "PLANT_black-234"
+      ]
+    },
+    "black-237": {
+      "hit": false,
+      "retrieved": [
+        "PLANT_black-238",
+        "PLANT_black-234"
+      ]
+    },
+    "black-238": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_black-238",
+        "PLANT_black-234"
+      ]
+    },
+    "black-273": {
+      "hit": false,
+      "retrieved": [
+        "bugsinpy:black:17:black.py",
+        "PLANT_black-297"
+      ]
+    },
+    "black-297": {
+      "hit": true,
+      "retrieved": [
+        "bugsinpy:black:17:black.py",
+        "PLANT_black-297"
+      ]
+    },
+    "black-329": {
+      "hit": false,
+      "retrieved": [
+        "bugsinpy:black:16:black.py",
+        "PLANT_black-335"
+      ]
+    },
+    "black-334": {
+      "hit": true,
+      "retrieved": [
+        "bugsinpy:black:10:blib2to3:pgen2:driver.py",
+        "PLANT_black-334"
+      ]
+    },
+    "black-335": {
+      "hit": true,
+      "retrieved": [
+        "bugsinpy:black:16:black.py",
+        "PLANT_black-335"
+      ]
+    },
+    "black-371": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_black-371",
+        "bugsinpy:black:14:black.py"
+      ]
+    },
+    "black-385": {
+      "hit": true,
+      "retrieved": [
+        "bugsinpy:black:12:black.py",
+        "PLANT_black-385"
+      ]
+    },
+    "black-389": {
+      "hit": true,
+      "retrieved": [
+        "bugsinpy:black:14:black.py",
+        "PLANT_black-389"
+      ]
+    },
+    "black-46": {
+      "hit": false,
+      "retrieved": [
+        "bugsinpy:black:23:black.py",
+        "PLANT_black-60"
+      ]
+    },
+    "black-55": {
+      "hit": false,
+      "retrieved": [
+        "bugsinpy:black:23:black.py",
+        "PLANT_black-60"
+      ]
+    },
+    "black-59": {
+      "hit": false,
+      "retrieved": [
+        "bugsinpy:black:23:black.py",
+        "PLANT_black-60"
+      ]
+    },
+    "black-60": {
+      "hit": true,
+      "retrieved": [
+        "bugsinpy:black:23:black.py",
+        "PLANT_black-60"
+      ]
+    },
+    "black-74": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_black-74",
+        "PLANT_black-60"
+      ]
+    },
+    "black-80": {
+      "hit": true,
+      "retrieved": [
+        "bugsinpy:black:13:blib2to3:pgen2:tokenize.py",
+        "PLANT_black-80"
+      ]
+    },
+    "black-95": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_black-95",
+        "PLANT_black-183"
+      ]
+    },
+    "cookiecutter-1513": {
+      "hit": true,
+      "retrieved": [
+        "bugsinpy:httpie:3:httpie:sessions.py",
+        "PLANT_cookiecutter-1513"
+      ]
+    },
+    "discord.py-7676": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_discord.py-7676",
+        "PLANT_discord.py-7818"
+      ]
+    },
+    "discord.py-7818": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_discord.py-7818",
+        "PLANT_discord.py-7676"
+      ]
+    },
+    "pandas-13509": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-13509",
+        "bugsinpy:pandas:123:pandas:core:indexes:numeric.py"
+      ]
+    },
+    "pandas-13598": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-13598",
+        "PLANT_pandas-15055"
+      ]
+    },
+    "pandas-14416": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-14416",
+        "PLANT_pandas-15676"
+      ]
+    },
+    "pandas-14466": {
+      "hit": false,
+      "retrieved": [
+        "PLANT_pandas-14776",
+        "PLANT_pandas-14770"
+      ]
+    },
+    "pandas-14504": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-14504",
+        "bugsinpy:pandas:47:pandas:core:indexing.py"
+      ]
+    },
+    "pandas-14522": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-14522",
+        "PLANT_pandas-15424"
+      ]
+    },
+    "pandas-14580": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-14730",
+        "PLANT_pandas-14580"
+      ]
+    },
+    "pandas-14617": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-14617",
+        "PLANT_pandas-16114"
+      ]
+    },
+    "pandas-14621": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-14621",
+        "bugsinpy:pandas:20:pandas:tseries:offsets.py"
+      ]
+    },
+    "pandas-14652": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-14652",
+        "PLANT_pandas-15428"
+      ]
+    },
+    "pandas-14730": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-14730",
+        "PLANT_pandas-14580"
+      ]
+    },
+    "pandas-14770": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-14776",
+        "PLANT_pandas-14770"
+      ]
+    },
+    "pandas-14776": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-14776",
+        "PLANT_pandas-14770"
+      ]
+    },
+    "pandas-14922": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-14922",
+        "PLANT_pandas-14776"
+      ]
+    },
+    "pandas-14973": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-14973",
+        "PLANT_pandas-14522"
+      ]
+    },
+    "pandas-15021": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-15021",
+        "bugsinpy:pandas:34:pandas:core:resample.py"
+      ]
+    },
+    "pandas-15277": {
+      "hit": false,
+      "retrieved": [
+        "PLANT_pandas-14522",
+        "PLANT_pandas-15424"
+      ]
+    },
+    "pandas-15348": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-15348",
+        "PLANT_pandas-15424"
+      ]
+    },
+    "pandas-15488": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-15488",
+        "PLANT_pandas-15604"
+      ]
+    },
+    "pandas-15604": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-15604",
+        "PLANT_pandas-14922"
+      ]
+    },
+    "pandas-15676": {
+      "hit": false,
+      "retrieved": []
+    },
+    "pandas-15822": {
+      "hit": false,
+      "retrieved": []
+    },
+    "pandas-15955": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-15955",
+        "bugsinpy:pandas:83:pandas:core:indexes:api.py"
+      ]
+    },
+    "pandas-16114": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-16114",
+        "PLANT_pandas-15822"
+      ]
+    },
+    "pandas-16466": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_pandas-16466",
+        "PLANT_pandas-15428"
+      ]
+    },
+    "salt-59705": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_salt-59705",
+        "PLANT_salt-60391"
+      ]
+    },
+    "salt-62336": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_salt-62336",
+        "bugsinpy:black:19:black.py"
+      ]
+    },
+    "salt-64280": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_salt-64280",
+        "PLANT_salt-64477"
+      ]
+    },
+    "salt-64477": {
+      "hit": true,
+      "retrieved": [
+        "PLANT_salt-64477",
+        "PLANT_salt-62988"
+      ]
+    },
+    "scrapy-2552": {
+      "hit": true,
+      "retrieved": [
+        "bugsinpy:scrapy:37:scrapy:http:request:__init__.py",
+        "PLANT_scrapy-2552"
+      ]
+    }
+  }
+}

@@ -1,0 +1,46 @@
+[
+  {
+    "case_id": "black-238",
+    "repository": "black",
+    "issue_id": 238,
+    "file_path": "black.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "running test\nrunning egg_info\nwriting black.egg-info/PKG-INFO\nwriting dependency_links to black.egg-info/dependency_links.txt\nwriting entry points to black.egg-info/entry_points.txt\nwriting requirements to black.egg-info/requires.txt\nwriting top-level names to black.egg-info/top_level.txt\nreading manifest file 'black.egg-info/SOURCES.txt'\nreading manifest template 'MANIFEST.in'\nadding license file 'LICENSE'\nwriting manifest file 'black.egg-info/SOURCES.txt'\nrunning build_ext\nGenerating grammar tables from /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/black-238/blib2to3/Grammar.txt\nWriting grammar tables to /github/home/.cache/black/18.5b0/Grammar3.7.17.final.0.pickle\nWriting failed: [Errno 2] No such file or directory: '/github/home/.cache/black/18.5b0/Grammar3.7.17.final.0.pickle'\nGenerating grammar tables from /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/black-238/blib2to3/PatternGrammar.txt\nWriting grammar tables to /github/home/.cache/black/18.5b0/PatternGrammar3.7.17.final.0.pickle\nWriting failed: [Errno 2] No such file or directory: '/github/home/.cache/black/18.5b0/PatternGrammar3.7.17.final.0.pickle'\nWARNING: Testing via this command is deprecated and will be removed in a future version. Users looking for a generic test entry point independent of test runner are encouraged to use tox.\n/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/black-238/.venv/lib/python3.7/site-packages/setuptools/command/test.py:194: _DeprecatedInstaller: setuptools.installer and fetch_build_eggs are deprecated.\n!!\n        ********************************************************************************\n        Requirements should be satisfied by a PEP 517 installer.\n        If you are using pip, you can try `pip install --use-pep517`.\n        ********************************************************************************"
+  },
+  {
+    "case_id": "black-237",
+    "repository": "black",
+    "issue_id": 237,
+    "file_path": "black.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[PATCH REJECTED]\noriginal text mismatch at lines 10-12"
+  },
+  {
+    "case_id": "black-234",
+    "repository": "black",
+    "issue_id": 234,
+    "file_path": "black.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[PATCH REJECTED]\noriginal text mismatch at lines 10-12"
+  },
+  {
+    "case_id": "black-232",
+    "repository": "black",
+    "issue_id": 232,
+    "file_path": "black.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[PATCH REJECTED]\noriginal text mismatch at lines 769-774"
+  }
+]

@@ -1,0 +1,13 @@
+[
+  {
+    "case_id": "cookiecutter-1513",
+    "repository": "cookiecutter",
+    "issue_id": 1513,
+    "file_path": "cookiecutter/config.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "ImportError while loading conftest '/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/cookiecutter-1513/tests/conftest.py'.\ntests/conftest.py:8: in <module>\n    from cookiecutter import utils\ncookiecutter/utils.py:10: in <module>\n    from cookiecutter.prompt import read_user_yes_no\ncookiecutter/prompt.py:5: in <module>\n    import click\n.venv/lib/python3.8/site-packages/click-8.4.2-py3.8.egg/click/__init__.py:10: in <module>\n    from .core import Argument as Argument\n.venv/lib/python3.8/site-packages/click-8.4.2-py3.8.egg/click/core.py:23: in <module>\n    from . import types\n.venv/lib/python3.8/site-packages/click-8.4.2-py3.8.egg/click/types.py:17: in <module>\n    from .exceptions import BadParameter\n.venv/lib/python3.8/site-packages/click-8.4.2-py3.8.egg/click/exceptions.py:10: in <module>\n    from .utils import echo\nE     File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/cookiecutter-1513/.venv/lib/python3.8/site-packages/click-8.4.2-py3.8.egg/click/utils.py\", line 302\nE       match message:\nE             ^\nE   SyntaxError: invalid syntax"
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-14922",
+    "repository": "pandas",
+    "issue_id": 14922,
+    "file_path": "pandas/core/algorithms.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[PATCH REJECTED]\noriginal text mismatch at lines 348-352"
+  },
+  {
+    "case_id": "pandas-14776",
+    "repository": "pandas",
+    "issue_id": 14776,
+    "file_path": "pandas/core/groupby.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14776\ncollected 299 items\npandas/tests/test_groupby.py .........................FF.....F..F..F.... [ 14%]\n.....................F....F....F...F.................................... [ 38%]\n.........F.....................................................F........ [ 62%]\n..............F......................................................... [ 86%]\n..........F..........FF.................                                 [100%]\n=================================== FAILURES ===================================\n________________________ TestGroupBy.test_apply_corner _________________________\nself = <pandas.tests.test_groupby.TestGroupBy testMethod=test_apply_corner>\n    def test_apply_corner(self):\n>       result = self.tsframe.groupby(lambda x: x.year).apply(lambda x: x * 2)\npandas/tests/test_groupby.py:3174:\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\npandas/core/groupby.py:694: in apply\n    return self._python_apply_general(f)\npandas/core/groupby.py:700: in _python_apply_general\n    return self._wrap_applied_output(\npandas/core/groupby.py:3310: in _wrap_applied_output\n    return self._concat_objects(keys, values,\npandas/core/groupby.py:864: in _concat_objects\n    result = result.reindex(ax, axis=self.axis)\npandas/core/frame.py:2820: in reindex"
+  }
+]

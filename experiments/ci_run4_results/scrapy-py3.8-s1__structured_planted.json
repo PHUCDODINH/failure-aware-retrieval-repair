@@ -1,0 +1,13 @@
+[
+  {
+    "case_id": "scrapy-2552",
+    "repository": "scrapy",
+    "issue_id": 2552,
+    "file_path": "scrapy/http/request/__init__.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  }
+]

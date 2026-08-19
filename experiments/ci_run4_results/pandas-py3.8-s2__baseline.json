@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-16114",
+    "repository": "pandas",
+    "issue_id": 16114,
+    "file_path": "pandas/core/frame.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-16114\nconfigfile: setup.cfg\ncollected 95 items\npandas/tests/frame/test_constructors.py ..F..F.F.F..F.F.F...FFF....FF... [ 33%]\nF..F.F.FF.FF............FF.F.F.F.F.FF.F.FF........FF.F...FF.FFF          [100%]\n=================================== FAILURES ===================================\n__________ TestDataFrameConstructors.test_constructor_Series_copy_bug __________\nself = <pandas.tests.frame.test_constructors.TestDataFrameConstructors testMethod=test_constructor_Series_copy_bug>\n    def test_constructor_Series_copy_bug(self):\n>       df = DataFrame(self.frame['A'], index=self.frame.index, columns=['A'])\npandas/tests/frame/test_constructors.py:1018:\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\npandas/core/frame.py:2060: in __getitem__\n    return self._getitem_column(key)\npandas/core/frame.py:2067: in _getitem_column\n    return self._get_item_cache(key)\npandas/core/generic.py:1554: in _get_item_cache\n    res = self._box_item_values(item, values)\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\nself =                    A         B         C         D\nJV0etNnPxY  1.224559  2.526385  1.573343 -0.229263\nCNlhUdJDUV -0.52....983036 -0.169743\nOtFRIEXloB -0.747150 -0.194715 -0.022999  0.656901"
+  },
+  {
+    "case_id": "pandas-15955",
+    "repository": "pandas",
+    "issue_id": 15955,
+    "file_path": "pandas/indexes/api.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  }
+]

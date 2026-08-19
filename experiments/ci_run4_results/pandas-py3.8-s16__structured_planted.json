@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-14466",
+    "repository": "pandas",
+    "issue_id": 14466,
+    "file_path": "pandas/core/groupby.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[PATCH REJECTED]\noriginal text mismatch at lines 784-784"
+  },
+  {
+    "case_id": "pandas-14416",
+    "repository": "pandas",
+    "issue_id": 14416,
+    "file_path": "pandas/tools/merge.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[PATCH REJECTED]\noriginal text mismatch at lines 1286-1288"
+  }
+]

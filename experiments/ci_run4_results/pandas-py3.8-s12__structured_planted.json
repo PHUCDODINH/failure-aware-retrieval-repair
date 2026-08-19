@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-14652",
+    "repository": "pandas",
+    "issue_id": 14652,
+    "file_path": "pandas/tools/tile.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14652\ncollected 0 items / 1 error\n==================================== ERRORS ====================================\n_______________ ERROR collecting pandas/tools/tests/test_tile.py _______________\nImportError while importing test module '/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14652/pandas/tools/tests/test_tile.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/lib/python3.8/importlib/__init__.py:127: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\npandas/__init__.py:50: in <module>\n    from pandas.tools.tile import cut, qcut\nE   ImportError: cannot import name 'qcut' from 'pandas.tools.tile' (/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14652/pandas/tools/tile.py)\n=============================== warnings summary ===============================\n.venv/lib/python3.8/site-packages/numpy/ma/core.py:4466\n  /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14652/.venv/lib/python3.8/site-packages/numpy/ma/core.py:4466: SyntaxWarning: \"is\" with a literal. Did you mean \"==\"?\n    if self.shape is ():\npandas/types/dtypes.py:167\n  /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14652/pandas/types/dtypes.py:167: DeprecationWarning: invalid escape sequence \\[\n    _match = re.compile(\"(datetime64|M8)\\[(?P<unit>.+), (?P<tz>.+)\\]\")\npandas/types/dtypes.py:272\n  /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14652/pandas/types/dtypes.py:272: DeprecationWarning: invalid escape sequence \\[\n    _match = re.compile(\"(P|p)eriod\\[(?P<freq>.+)\\]\")\npandas/core/strings.py:533"
+  },
+  {
+    "case_id": "pandas-14621",
+    "repository": "pandas",
+    "issue_id": 14621,
+    "file_path": "pandas/tseries/offsets.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[PATCH REJECTED]\noriginal text mismatch at lines 74-100"
+  }
+]

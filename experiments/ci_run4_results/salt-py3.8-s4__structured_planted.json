@@ -1,0 +1,13 @@
+[
+  {
+    "case_id": "salt-59705",
+    "repository": "salt",
+    "issue_id": 59705,
+    "file_path": "salt/modules/network.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[PATCH REJECTED]\noriginal text mismatch at lines 2099-2100"
+  }
+]

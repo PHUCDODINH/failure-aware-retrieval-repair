@@ -1,0 +1,46 @@
+[
+  {
+    "case_id": "black-2254",
+    "repository": "black",
+    "issue_id": 2254,
+    "file_path": "src/black/comments.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "black-1812",
+    "repository": "black",
+    "issue_id": 1812,
+    "file_path": "src/black/__init__.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "black-1596",
+    "repository": "black",
+    "issue_id": 1596,
+    "file_path": "src/black/__init__.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "black-1493",
+    "repository": "black",
+    "issue_id": 1493,
+    "file_path": "src/black/__init__.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  }
+]

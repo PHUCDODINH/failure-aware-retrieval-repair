@@ -432,17 +432,25 @@ matches baseline on black but costs three pandas cases), and the usable
 set is 89\% black+pandas after project-correlated attrition
 (Section~\ref{sec:design}), so the pooled estimate inherits that skew.
 (iii)~The planted-vs-baseline contrast confounds any coverage benefit with
-retrieval-prompt overhead; the cleaner planted-vs-\structured(normal)
-contrast (same prompt shape, corpora differing only in the plants) shows
-identical pooled totals but different per-project compositions, and
-per-case analysis of the 11 discordant baseline-vs-planted cases ---
-why exact-fix examples converted 4 yet accompanied 7 regressions --- is
-the key open diagnostic our logs do not fully resolve. What the
-replication establishes is therefore modest but real: the encouraging
-single-project effect was not recovered at scale, and any true pooled
-effect of guaranteed coverage on these real bugs is bounded below
-$+6.3\pp$ --- far from the $+14$--$22\pp$ the synthetic decomposition
-would predict.
+retrieval-prompt overhead, so we also report the clean coverage contrast:
+planted vs \structured(normal), identical prompt shape, corpora differing
+only in the plants. It is an exactly balanced null --- 10 discordant cases,
+5 in each direction ($p{=}1.0$) --- i.e., with the pipeline held fixed,
+adding the exact fix pairs to the corpus produced symmetric case churn and
+zero net effect. An instrumented rerun explains part of why: \emph{the
+planted pair reached the $k{=}2$ prompt in only 76\% of cases} (black:
+65\%) --- near-duplicate plants from sibling bugs in the same large file
+collide, and the reranker selects a different bug's pair (the
+repository-scale form of the demotion effect in RQ3). So ``guaranteed''
+corpus coverage does not guarantee \emph{prompt} coverage on real bugs.
+Conversion also fails outright: all 7 regressions had applied patches that
+failed tests (in the instrumented rerun, every regressed case \emph{did}
+receive its planted pair), so an exact-fix example in the prompt neither
+protects passing cases nor reliably converts failing ones. What the replication establishes is therefore modest but real:
+the encouraging single-project effect was not recovered at scale, and any
+true pooled effect of guaranteed coverage on these real bugs is bounded
+below $+6.3\pp$ --- far from the $+14$--$22\pp$ the synthetic
+decomposition would predict.
 
 \section{Discussion and Threats}
 \label{sec:discussion}
@@ -479,19 +487,19 @@ rather than bare non-significance.
 constructible by design; the real-bug replication (RQ4) could not confirm
 transfer, and that result is itself bounded --- 55/116 cases evaluable
 after project-correlated attrition, a usable set dominated by two projects,
-one model (GPT-4o-mini), one CI run per arm, and cross-environment
-variation of the same magnitude as the arm differences (we did not run
-repeated CI trials to quantify a flake floor). \emph{Construct validity:}
+one model (GPT-4o-mini), and cross-environment variation: the local pilot
+did not reproduce in CI, and a repeated instrumented CI run bounds
+cross-run flips at 4--8\% of cases per arm --- comparable to the arm
+differences themselves. \emph{Construct validity:}
 both automated relevance measures are proxies sharing the retrieval
 encoder; the \oraclecorpus\ arm selects the ``best real example'' by that
 same proxy, so ranking headroom is underestimated to the extent the proxy
 errs --- an asymmetry that would shift the decomposition toward ranking,
 not away from coverage. The audit is weak corroboration only
-(Section~\ref{sec:results}). Whether the planted pairs were retrieved into
-the $k{=}2$ context on the real-bug arms is not instrumented in our CI
-logs --- on synthetic bugs the hit rate is 94--100\%, but long repository
-files may retrieve differently, and a low hit rate would reframe RQ4's
-null as a retrieval failure rather than a conversion failure.
+(Section~\ref{sec:results}). The real-bug retrieval hit rate (76\%) was
+measured in a separate instrumented rerun, not in the replication run
+itself; retrieval-order nondeterminism in near-duplicate tie clusters
+means per-case hit status may differ slightly between runs.
 \emph{Internal validity:} the decomposition is one bug family, two
 non-saturated models plus a saturated control; direction replicates across
 architectures, magnitudes are benchmark-specific. \emph{Scope:} all
