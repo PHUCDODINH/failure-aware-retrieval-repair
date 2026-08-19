@@ -1,0 +1,13 @@
+[
+  {
+    "case_id": "pandas-13598",
+    "repository": "pandas",
+    "issue_id": 13598,
+    "file_path": "pandas/core/strings.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  }
+]

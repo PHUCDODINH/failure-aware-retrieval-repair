@@ -119,16 +119,19 @@ jobs:
               baseline)
                 /opt/evalvenv/bin/python src/eval/evaluate_pybughive.py $COMMON \
                   --mode baseline \
+                  --trace-dir "traces/${{ matrix.name }}__baseline" \
                   --results-path "results/${{ matrix.name }}__baseline.json" ;;
               structured_normal)
                 /opt/evalvenv/bin/python src/eval/evaluate_pybughive.py $COMMON \
                   --mode rag --retrieval-variant structured \
                   --retrieval-index-dir ci_indexes/pybh_filler_only \
+                  --trace-dir "traces/${{ matrix.name }}__structured_normal" \
                   --results-path "results/${{ matrix.name }}__structured_normal.json" ;;
               structured_planted)
                 /opt/evalvenv/bin/python src/eval/evaluate_pybughive.py $COMMON \
                   --mode rag --retrieval-variant structured \
                   --retrieval-index-dir ci_indexes/pybh_all_planted \
+                  --trace-dir "traces/${{ matrix.name }}__structured_planted" \
                   --results-path "results/${{ matrix.name }}__structured_planted.json" ;;
             esac
           done
@@ -138,6 +141,13 @@ jobs:
           name: results-${{ matrix.name }}
           path: results/
           retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: traces-${{ matrix.name }}
+          path: traces/
+          retention-days: 30
+          if-no-files-found: ignore
 
   analyze:
     needs: evaluate

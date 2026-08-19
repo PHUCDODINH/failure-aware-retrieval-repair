@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "spaCy-8019",
+    "repository": "spaCy",
+    "issue_id": 8019,
+    "file_path": "spacy/lang/en/lex_attrs.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\nCollecting spacy-legacy<3.1.0,>=3.0.5\n  Downloading spacy_legacy-3.0.12-py2.py3-none-any.whl (29 kB)\nCollecting cymem<2.1.0,>=2.0.2\n  Downloading cymem-2.0.11.tar.gz (10 kB)\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'done'\n  Installing backend dependencies: started\n  Installing backend dependencies: finished with status 'done'\n  Preparing metadata (pyproject.toml): started\n  Preparing metadata (pyproject.toml): finished with status 'done'\nCollecting preshed<3.1.0,>=3.0.2\n  Downloading preshed-3.0.12.tar.gz (15 kB)\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'error'\n  error: subprocess-exited-with-error\n  \u00d7 pip subprocess to install build dependencies did not run successfully.\n  \u2502 exit code: 1\n  \u2570\u2500> [38 lines of output]\n      Collecting setuptools\n        Using cached setuptools-68.0.0-py3-none-any.whl (804 kB)\n      Collecting cython>=0.28\n        Using cached Cython-3.0.12-cp37-cp37m-manylinux_2_17_x86_64.manylinux2014_x86_64.whl (3.6 MB)\n      Collecting cymem<2.1.0,>=2.0.2"
+  },
+  {
+    "case_id": "spaCy-3830",
+    "repository": "spaCy",
+    "issue_id": 3830,
+    "file_path": "spacy/cli/train.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\nIgnoring pathlib: markers 'python_version < \"3.4\"' don't match your environment\nCollecting cymem<2.1.0,>=2.0.2\n  Using cached cymem-2.0.11.tar.gz (10 kB)\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'done'\n  Getting requirements to build wheel: started\n  Getting requirements to build wheel: finished with status 'done'\n  Installing backend dependencies: started\n  Installing backend dependencies: finished with status 'done'\n  Preparing metadata (pyproject.toml): started\n  Preparing metadata (pyproject.toml): finished with status 'done'\nCollecting preshed<2.1.0,>=2.0.1\n  Downloading preshed-2.0.1-cp37-cp37m-manylinux1_x86_64.whl (82 kB)\n     \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 82.2/82.2 kB 335.5 kB/s eta 0:00:00\nCollecting thinc<7.1.0,>=7.0.8\n  Downloading thinc-7.0.8-cp37-cp37m-manylinux1_x86_64.whl (2.1 MB)\n     \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 2.1/2.1 MB 16.1 MB/s eta 0:00:00\nCollecting blis<0.3.0,>=0.2.2\n  Downloading blis-0.2.4-cp37-cp37m-manylinux1_x86_64.whl (3.2 MB)\n     \u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501\u2501 3.2/3.2 MB 16.5 MB/s eta 0:00:00\nCollecting murmurhash<1.1.0,>=0.28.0\n  Using cached murmurhash-1.0.15.tar.gz (13 kB)\n  Installing build dependencies: started\n  Installing build dependencies: finished with status 'error'\n  error: subprocess-exited-with-error"
+  }
+]

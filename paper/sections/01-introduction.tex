@@ -1,0 +1,96 @@
+\section{Introduction}
+\label{sec:intro}
+
+Large language models repair a substantial fraction of buggy programs from a
+single prompt containing the code and a failing test's output. A natural next
+step, borrowed from retrieval-augmented generation (RAG), is to also show the
+model \emph{similar past fixes}: retrieve bug-fix pairs from a corpus of
+historical repairs, and let the model imitate the relevant repair pattern.
+Several recent systems report gains from exactly this recipe
+\cite{recode,inferfix,rapgen,ragfix}, and the intuition is compelling ---
+if a developer benefits from seeing how a similar bug was fixed before, an LLM
+should too.
+
+This paper reports a critical empirical study of that intuition. We built the
+strongest retrieval signal we could construct for the repair setting:
+\emph{structured failure-aware retrieval}, which parses the observed test
+failure into a structured state (failure mode, exception type, failing test
+name, assertion summary, suspicious symbols, contract tags) and reranks
+dense-retrieved candidates by compatibility between that state and repair
+metadata inferred from each corpus example's diff
+(Section~\ref{sec:method}). We then asked three increasingly uncomfortable
+questions:
+
+\begin{description}
+  \item[RQ1 (Relevance)] Does structured failure-aware reranking retrieve
+    more fix-relevant examples than dense code retrieval?
+  \item[RQ2 (Conversion)] Do more relevant examples produce more successful
+    repairs?
+  \item[RQ3 (Mechanism)] When retrieval fails to help, what is the binding
+    constraint --- the ranking of the corpus, or the corpus itself?
+  \item[RQ4 (Transfer)] Does the answer transfer from synthetic benchmark
+    bugs to real repository bugs?
+\end{description}
+
+\noindent
+Our answers, established across four benchmarks (QuixBugs, HumanEvalFix, a
+contamination-controlled MBPP repair split, and real repository bugs from
+PyBugHive), six models (GPT-4o, GPT-4.1, GPT-4o-mini, Llama-3-8B,
+Llama-3.3-70B, Qwen2.5-7B), and five retrieval variants, are largely
+negative --- and, we argue, more useful than another reported win:
+
+\textbf{The relevance gain is real but fragile (RQ1).} Structured reranking
+significantly improves an independent, vocabulary-free relevance metric on
+QuixBugs ($+13\%$, Wilcoxon $p{=}0.0001$, $n{=}40$), but the gain does
+\emph{not} replicate on a larger benchmark (MBPP-holdout, $n{=}187$: $-0.008$,
+$p{=}0.41$). A skeptic may reasonably treat the larger-sample null as the
+better estimate.
+
+\textbf{Relevance does not convert (RQ2).} Across all models, corpora, and
+benchmarks, no retrieval variant significantly beats the no-retrieval
+baseline; every point estimate is neutral-to-slightly-negative ($-0.5$ to
+$-3.7\pp$). Equivalence testing bounds any undetected effect: results are
+equivalent to baseline within $\pm 10\pp$ (though not within the stricter
+$\pm 5\pp$), with minimum detectable effects of $4.8$--$9.1\pp$.
+
+\textbf{The binding constraint is corpus coverage, not ranking (RQ3).} A
+planted-corpus experiment guarantees that a \emph{perfect} example (the test
+problem's own buggy$\to$fixed pair) is present in the corpus. Repair then
+jumps by $+21.9\pp$ ($p{<}0.0001$) --- and plain dense retrieval already
+surfaces the planted example 100\% of the time, while structured reranking
+selects it \emph{less} often (94.1\%). Decomposing the gap between baseline,
+the best \emph{real} corpus example (\oraclecorpus), and the planted perfect
+example shows coverage headroom of $+14.4$/$+13.4\pp$ (significant, two
+models) against ranking headroom of $+7.5$/$-1.6\pp$ (marginal to negative).
+When a sufficiently relevant example exists, dense retrieval finds it; when
+none exists --- the common case on realistic corpora --- no reranker can help.
+
+\textbf{Real-bug transfer is directionally supported (RQ4).} On real
+repository bugs (PyBugHive \texttt{black}), planting the exact fix converted
+all four baseline failures ($85.7\%{\to}96.4\%$), with the repair applied
+through a line-range patch layer on large files. This result is underpowered
+(McNemar $p{=}0.375$);
+%% TODO(powered-CI): replace with the powered 116-case, 10-project result and
+%% its McNemar p once the CI experiment completes; rewrite this paragraph as a
+%% headline finding if significant.
+a powered replication across 10 projects is in progress.
+
+\smallskip
+\noindent\textbf{Contributions.}
+\begin{itemize}
+  \item A structured failure-aware retrieval method for program repair with an
+    explicit, ablatable reranking function over six failure-state fields
+    (each of five fields contributes measurably on QuixBugs).
+  \item A statistically grounded negative result: retrieval-augmented repair
+    is neutral-to-slightly-negative for capable models on synthetic and
+    algorithmic benchmarks, with equivalence bounds and minimum detectable
+    effects reported rather than bare non-significance.
+  \item A planted-corpus decomposition isolating corpus coverage from
+    retrieval ranking, replicated across two model families, that locates the
+    binding constraint in coverage and shows reranking sophistication is
+    downstream-inert.
+  \item A cost analysis showing structured RAG is Pareto-dominated by the
+    baseline for repair ($\sim$4$\times$ prompt tokens for zero-to-negative
+    accuracy return), and actionable guidance: invest in corpus coverage, not
+    reranking.
+\end{itemize}

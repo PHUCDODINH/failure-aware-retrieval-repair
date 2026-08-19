@@ -1,0 +1,52 @@
+\section{Structured Failure-Aware Retrieval}
+\label{sec:method}
+
+\subsection{Pipeline}
+Our repair pipeline takes buggy Python code plus a raw failure signal
+(pytest output) and proceeds in five steps: (1)~extract a \emph{structured
+failure state} from the failure signal; (2)~dense-retrieve candidate bug-fix
+pairs from a FAISS index of corpus examples embedded with
+all-MiniLM-L6-v2~\cite{sbert} over the buggy code; (3)~rerank the candidate
+pool with one of the variants below; (4)~prompt the LLM with the bug, the
+failure signal, and the top-$k$ ($k{=}2$) retrieved examples rendered as
+compact buggy$\to$fixed diffs plus an inferred one-line ``repair lesson'';
+(5)~apply the edit and run the tests. Small files are replaced whole; large
+files (${>}40$k characters) are edited through a strict JSON line-range patch
+schema with validation retry, which matters for repository-scale bugs
+(Section~\ref{sec:results-transfer}).
+
+\subsection{Failure state and repair metadata}
+The query-side \emph{failure state} has six fields extracted from the failure
+signal: \texttt{failure\_mode}, \texttt{exception\_type},
+\texttt{test\_name}, \texttt{assertion\_summary},
+\texttt{suspicious\_symbols}, and \texttt{contract\_tags}. On the corpus
+side, each example's buggy$\to$fixed diff is mined for \emph{repair
+metadata}: \texttt{repair\_pattern\_tags}, \texttt{suspicious\_symbols},
+\texttt{changed\_operators}, \texttt{edit\_scope}, \texttt{file\_family}, and
+\texttt{changed\_lines}.
+
+\subsection{Retrieval variants}
+We compare five variants: \textsc{baseline} (no retrieval); \codeonly (dense
+retrieval on buggy code, rank = dense rank); \rawtext (dense retrieval on
+buggy code + raw failure text); \rawrerank (dense retrieval + lexical
+failure-text reranking); and \structured, our method, which scores each
+candidate at dense rank $r$ as
+\begin{align*}
+\mathit{score} ={}& 1.0\cdot\mathit{dense}(r)
+  + 0.8\cdot\mathit{tagOverlap}
+  + 0.7\cdot\mathit{symOverlap} \\
+  &+ 0.8\cdot\mathit{modeCompat}
+  + 0.5\cdot\mathit{excCompat}
+  + 0.2\cdot\mathit{fileFam} \\
+  &- \mathit{changedLines}/400 .
+\end{align*}
+Overlaps are Jaccard similarities between failure-state fields and repair
+metadata; compatibility terms encode hand-written failure-mode and
+exception-class compatibility. The weights were fixed once, early, on
+QuixBugs traces, and never tuned against any downstream result reported here.
+
+A per-field ablation on QuixBugs (GPT-4o) confirms the signal is not
+redundant: removing any one of \texttt{contract\_tags},
+\texttt{suspicious\_symbols}, \texttt{failure\_mode}, \texttt{test\_name}, or
+\texttt{assertion\_summary} costs one repaired problem (37/40${\to}$36/40);
+only \texttt{exception\_type} contributes nothing on this benchmark.

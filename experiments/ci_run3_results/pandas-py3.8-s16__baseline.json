@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-14466",
+    "repository": "pandas",
+    "issue_id": 14466,
+    "file_path": "pandas/core/groupby.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14466\ncollected 297 items\npandas/tests/test_groupby.py .......F..........................F.......F [ 14%]\n.....................F.......................................F.....F.... [ 38%]\n............................F........................................... [ 62%]\n........F................................................F.........F.... [ 87%]\n.FF............FF.....................                                   [100%]\n=================================== FAILURES ===================================\n____________ TestGroupBy.test_agg_dict_parameter_cast_result_dtypes ____________\nValueError: Error parsing datetime string \"1/1/2011\" at position 1\nThe above exception was the direct cause of the following exception:\nself = <pandas.tests.test_groupby.TestGroupBy testMethod=test_agg_dict_parameter_cast_result_dtypes>\n    def test_agg_dict_parameter_cast_result_dtypes(self):\n        # GH 12821\n        df = DataFrame(\n            {'class': ['A', 'A', 'B', 'B', 'C', 'C', 'D', 'D'],\n>            'time': date_range('1/1/2011', periods=8, freq='H')})\npandas/tests/test_groupby.py:784:\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\npandas/tseries/index.py:2021: in date_range\n    return DatetimeIndex(start=start, end=end, periods=periods,\npandas/util/decorators.py:91: in wrapper\n    return func(*args, **kwargs)"
+  },
+  {
+    "case_id": "pandas-14416",
+    "repository": "pandas",
+    "issue_id": 14416,
+    "file_path": "pandas/tools/merge.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  }
+]

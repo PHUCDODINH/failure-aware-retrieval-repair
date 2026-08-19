@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-14770",
+    "repository": "pandas",
+    "issue_id": 14770,
+    "file_path": "pandas/core/groupby.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14770\ncollected 299 items\npandas/tests/test_groupby.py ........................................... [ 14%]\n...................................F.................................... [ 38%]\n........................................................................ [ 62%]\n........................................................................ [ 86%]\n......................F.................                                 [100%]\n=================================== FAILURES ===================================\n______________________ TestGroupBy.test_fill_constistency ______________________\nself = <pandas.tests.test_groupby.TestGroupBy testMethod=test_fill_constistency>\n    def test_fill_constistency(self):\n        # GH9221\n        # pass thru keyword arguments to the generated wrapper\n        # are set if the passed kw is None (only)\n        df = DataFrame(index=pd.MultiIndex.from_product(\n            [['value1', 'value2'], date_range('2014-01-01', '2014-01-06')]),\n            columns=Index(\n            ['1', '2'], name='id'))\n        df['1'] = [np.nan, 1, np.nan, np.nan, 11, np.nan, np.nan, 2, np.nan,\n                   np.nan, 22, np.nan]\n        df['2'] = [np.nan, 3, np.nan, np.nan, 33, np.nan, np.nan, 4, np.nan,\n                   np.nan, 44, np.nan]\n        expected = df.groupby(level=0, axis=0).fillna(method='ffill')"
+  },
+  {
+    "case_id": "pandas-14730",
+    "repository": "pandas",
+    "issue_id": 14730,
+    "file_path": "pandas/core/indexing.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14730\ncollected 151 items\npandas/tests/indexing/test_indexing.py ..............................s.. [ 21%]\n...............................................F........................ [ 69%]\n..............................................                           [100%]\n=================================== FAILURES ===================================\n__________ TestIndexing.test_loc_setitem_consistency_slice_column_len __________\nself = <pandas.tests.indexing.test_indexing.TestIndexing testMethod=test_loc_setitem_consistency_slice_column_len>\n        def test_loc_setitem_consistency_slice_column_len(self):\n            # .loc[:,column] setting with slice == len of the column\n            # GH10408\n            data = \"\"\"Level_0,,,Respondent,Respondent,Respondent,OtherCat,OtherCat\n    Level_1,,,Something,StartDate,EndDate,Yes/No,SomethingElse\n    Region,Site,RespondentID,,,,,\n    Region_1,Site_1,3987227376,A,5/25/2015 10:59,5/25/2015 11:22,Yes,\n    Region_1,Site_1,3980680971,A,5/21/2015 9:40,5/21/2015 9:52,Yes,Yes\n    Region_1,Site_2,3977723249,A,5/20/2015 8:27,5/20/2015 8:41,Yes,\n    Region_1,Site_2,3977723089,A,5/20/2015 8:33,5/20/2015 9:09,Yes,No\"\"\"\n            df = pd.read_csv(StringIO(data), header=[0, 1], index_col=[0, 1, 2])\n            df.loc[:, ('Respondent', 'StartDate')] = pd.to_datetime(df.loc[:, (\n                'Respondent', 'StartDate')])\n            df.loc[:, ('Respondent', 'EndDate')] = pd.to_datetime(df.loc[:, (\n                'Respondent', 'EndDate')])"
+  }
+]

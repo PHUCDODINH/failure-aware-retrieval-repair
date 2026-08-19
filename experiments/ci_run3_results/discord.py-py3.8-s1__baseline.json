@@ -1,0 +1,13 @@
+[
+  {
+    "case_id": "discord.py-7818",
+    "repository": "discord.py",
+    "issue_id": 7818,
+    "file_path": "discord/app_commands/commands.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  }
+]

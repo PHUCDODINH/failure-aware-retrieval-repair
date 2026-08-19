@@ -1,0 +1,105 @@
+{
+  "arms": [
+    "baseline",
+    "structured_normal",
+    "structured_planted"
+  ],
+  "cases_attempted": 83,
+  "cases_usable": 55,
+  "cases_excluded_env": 28,
+  "excluded_case_ids": [
+    "freqtrade-7264",
+    "freqtrade-7368",
+    "freqtrade-7447",
+    "freqtrade-7489",
+    "freqtrade-7765",
+    "freqtrade-7766",
+    "freqtrade-8082",
+    "freqtrade-8229",
+    "freqtrade-8562",
+    "freqtrade-8714",
+    "freqtrade-8755",
+    "freqtrade-8758",
+    "jax-10729",
+    "jax-10834",
+    "jax-11010",
+    "jax-11965",
+    "jax-13857",
+    "jax-15190",
+    "jax-15385",
+    "jax-15400",
+    "jax-15886",
+    "jax-8634",
+    "jax-8688",
+    "jax-9429",
+    "jax-9969",
+    "spaCy-3531",
+    "spaCy-3830",
+    "spaCy-8019"
+  ],
+  "per_arm": {
+    "baseline": {
+      "passed": 42,
+      "total": 55,
+      "rate": 0.7636
+    },
+    "structured_normal": {
+      "passed": 39,
+      "total": 55,
+      "rate": 0.7091
+    },
+    "structured_planted": {
+      "passed": 39,
+      "total": 55,
+      "rate": 0.7091
+    }
+  },
+  "comparisons": {
+    "baseline_vs_structured_planted": {
+      "baseline_only_pass_b": 7,
+      "arm_only_pass_c": 4,
+      "mcnemar_exact_p": 0.548828,
+      "converted_baseline_failures": 4,
+      "regressed_baseline_passes": 7
+    },
+    "baseline_vs_structured_normal": {
+      "baseline_only_pass_b": 7,
+      "arm_only_pass_c": 4,
+      "mcnemar_exact_p": 0.548828,
+      "converted_baseline_failures": 4,
+      "regressed_baseline_passes": 7
+    }
+  },
+  "per_project": {
+    "black": {
+      "baseline": "23/26",
+      "structured_normal": "20/26",
+      "structured_planted": "23/26"
+    },
+    "cookiecutter": {
+      "baseline": "0/1",
+      "structured_normal": "0/1",
+      "structured_planted": "0/1"
+    },
+    "discord.py": {
+      "baseline": "1/1",
+      "structured_normal": "1/1",
+      "structured_planted": "1/1"
+    },
+    "pandas": {
+      "baseline": "15/23",
+      "structured_normal": "15/23",
+      "structured_planted": "12/23"
+    },
+    "salt": {
+      "baseline": "2/3",
+      "structured_normal": "2/3",
+      "structured_planted": "2/3"
+    },
+    "scrapy": {
+      "baseline": "1/1",
+      "structured_normal": "1/1",
+      "structured_planted": "1/1"
+    }
+  }
+}

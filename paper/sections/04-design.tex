@@ -1,0 +1,49 @@
+\section{Study Design}
+\label{sec:design}
+
+\subsection{Benchmarks}
+\textbf{QuixBugs}~\cite{quixbugs}: 40 algorithmic Python bugs; controlled
+setting. \textbf{HumanEvalFix}~\cite{octopack}: 164 function-level tasks;
+robustness setting. \textbf{MBPP-holdout}: a contamination-controlled repair
+split we construct from MBPP~\cite{mbpp}: 187 test problems with synthetic
+single-operator mutations, and a 508-pair retrieval corpus whose problems are
+disjoint from the test set (zero overlap). \textbf{PyBugHive}
+\texttt{black}~\cite{pybughive}: 34 real repository bugs with issue-linked
+fixed commits, evaluated end-to-end (checkout, environment build, patch, test
+run).
+%% TODO(powered-CI): extend to the 116-case, 10-project powered setting.
+
+\subsection{Retrieval corpora}
+The primary corpus is 551 real-world bug-fix pairs from
+BugsInPy~\cite{bugsinpy}. For PyBugHive we use a project-held-out variant
+(277 pairs, all 11 PyBugHive projects removed) to control contamination ---
+without this control, same-project corpus entries inflate apparent RAG effects.
+For MBPP we additionally build a genuine MBPP corpus (1{,}041 pairs) to test
+corpus--benchmark domain match. Planted-corpus variants
+(Section~\ref{sec:results-mechanism}) add each test problem's exact
+buggy$\to$fixed pair.
+
+\subsection{Models}
+GPT-4o, GPT-4.1, and GPT-4o-mini (OpenAI); Llama-3-8B-Instruct,
+Llama-3.3-70B-Instruct-Turbo, and Qwen2.5-7B-Instruct-Turbo (Together~AI).
+All runs use temperature~0, a single attempt, and a single candidate patch
+unless stated otherwise. Temperature-0 reruns flip at most 1/187 outcomes, so
+single-trial results are representative; where variance matters (QuixBugs) we
+report 5-trial means.
+
+\subsection{Measures and statistics}
+\textbf{Retrieval relevance} is measured two ways: a repair-pattern
+\emph{tag-compatibility} proxy (top-5 Jaccard against ground-truth fix tags),
+and an \emph{independent, vocabulary-free} metric --- the cosine similarity
+between a candidate example's fix diff and the ground-truth fix diff ---
+which shares no vocabulary with the reranker objective and thus defuses
+circularity. We report the tag proxy only alongside the independent metric,
+because it overstates ($+81\%$ vs $+13\%$ on QuixBugs).
+%% TODO(audit): add blind two-annotator human relevance audit (Cohen's kappa)
+%% here and in RQ1 results once annotation completes.
+\textbf{Repair success} is test-suite pass after applying the candidate
+patch. \textbf{Significance}: exact McNemar tests on paired outcomes for all
+downstream comparisons; Wilcoxon signed-rank plus bootstrap CIs for
+relevance. \textbf{Equivalence}: TOST at $\pm 5\pp$ and $\pm 10\pp$ margins
+with minimum detectable effects (MDE) at 80\% power, so that
+non-significance is never silently read as ``no effect.''

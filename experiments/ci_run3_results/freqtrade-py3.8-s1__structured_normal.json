@@ -1,0 +1,46 @@
+[
+  {
+    "case_id": "freqtrade-8758",
+    "repository": "freqtrade",
+    "issue_id": 8758,
+    "file_path": "freqtrade/exchange/exchange.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n/bin/sh: 1: sudo: not found"
+  },
+  {
+    "case_id": "freqtrade-8755",
+    "repository": "freqtrade",
+    "issue_id": 8755,
+    "file_path": "freqtrade/exchange/okx.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n/bin/sh: 1: sudo: not found"
+  },
+  {
+    "case_id": "freqtrade-8714",
+    "repository": "freqtrade",
+    "issue_id": 8714,
+    "file_path": "freqtrade/exchange/exchange.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n/bin/sh: 1: sudo: not found"
+  },
+  {
+    "case_id": "freqtrade-8562",
+    "repository": "freqtrade",
+    "issue_id": 8562,
+    "file_path": "freqtrade/rpc/webhook.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n/bin/sh: 1: sudo: not found"
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-15604",
+    "repository": "pandas",
+    "issue_id": 15604,
+    "file_path": "pandas/core/series.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "pandas-15488",
+    "repository": "pandas",
+    "issue_id": 15488,
+    "file_path": "pandas/formats/format.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-15488\nconfigfile: setup.cfg\ncollected 5 items\npandas/tests/sparse/test_format.py FFFF.                                 [100%]\n=================================== FAILURES ===================================\n_________________ TestSparseSeriesFormatting.test_sparse_bool __________________\nself = <pandas.tests.sparse.test_format.TestSparseSeriesFormatting testMethod=test_sparse_bool>\n    def test_sparse_bool(self):\n        # GH 13110\n        s = pd.SparseSeries([True, False, False, True, False, False],\n                            fill_value=False)\n>       result = repr(s)\npandas/tests/sparse/test_format.py:68:\n_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _\npandas/core/base.py:71: in __repr__\n    return str(self)\npandas/core/base.py:50: in __str__\n    return self.__unicode__()\npandas/sparse/series.py:296: in __unicode__\n    series_rep = Series.__unicode__(self)\npandas/core/series.py:984: in __unicode__\n    self.to_string(buf=buf, name=self.name, dtype=self.dtype,\npandas/core/series.py:1024: in to_string"
+  }
+]

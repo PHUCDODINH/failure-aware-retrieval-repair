@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-14652",
+    "repository": "pandas",
+    "issue_id": 14652,
+    "file_path": "pandas/tools/tile.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "pandas-14621",
+    "repository": "pandas",
+    "issue_id": 14621,
+    "file_path": "pandas/tseries/offsets.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621\ncollected 311 items\npandas/tseries/tests/test_offsets.py ...F...\nFatal Python error: Segmentation fault\nCurrent thread 0x00007efcea65e740 (most recent call first):\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/.venv/lib/python3.8/site-packages/dateutil/tz/tz.py\", line 1814 in _datetime_to_timestamp\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/.venv/lib/python3.8/site-packages/dateutil/tz/tz.py\", line 717 in _find_last_transition\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/.venv/lib/python3.8/site-packages/dateutil/tz/tz.py\", line 809 in _resolve_ambiguous_time\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/.venv/lib/python3.8/site-packages/dateutil/tz/tz.py\", line 739 in _find_ttinfo\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/.venv/lib/python3.8/site-packages/dateutil/tz/tz.py\", line 828 in utcoffset\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/pandas/tseries/tests/test_offsets.py\", line 489 in test_add\n  File \"/usr/local/lib/python3.8/unittest/case.py\", line 633 in _callTestMethod\n  File \"/usr/local/lib/python3.8/unittest/case.py\", line 676 in run\n  File \"/usr/local/lib/python3.8/unittest/case.py\", line 736 in __call__\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/.venv/lib/python3.8/site-packages/_pytest/unittest.py\", line 351 in runtest\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/.venv/lib/python3.8/site-packages/_pytest/runner.py\", line 174 in pytest_runtest_call\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/.venv/lib/python3.8/site-packages/pluggy/_callers.py\", line 103 in _multicall\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/.venv/lib/python3.8/site-packages/pluggy/_manager.py\", line 120 in _hookexec\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/.venv/lib/python3.8/site-packages/pluggy/_hooks.py\", line 513 in __call__\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/.venv/lib/python3.8/site-packages/_pytest/runner.py\", line 242 in <lambda>\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/.venv/lib/python3.8/site-packages/_pytest/runner.py\", line 341 in from_call\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/.venv/lib/python3.8/site-packages/_pytest/runner.py\", line 241 in call_and_report\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-14621/.venv/lib/python3.8/site-packages/_pytest/runner.py\", line 132 in runtestprotocol"
+  }
+]

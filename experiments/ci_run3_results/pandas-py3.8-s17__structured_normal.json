@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-13598",
+    "repository": "pandas",
+    "issue_id": 13598,
+    "file_path": "pandas/core/strings.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-13598\ncollected 91 items\npandas/tests/test_strings.py ..........F................................ [ 47%]\n................................................                         [100%]\n=================================== FAILURES ===================================\n___________________ TestStringMethods.test_empty_str_methods ___________________\nself = <pandas.tests.test_strings.TestStringMethods testMethod=test_empty_str_methods>\n    def test_empty_str_methods(self):\n        empty_str = empty = Series(dtype=str)\n        empty_int = Series(dtype=int)\n        empty_bool = Series(dtype=bool)\n        empty_list = Series(dtype=list)\n        empty_bytes = Series(dtype=object)\n        # GH7241\n        # (extract) on empty series\n        tm.assert_series_equal(empty_str, empty.str.cat(empty))\n        self.assertEqual('', empty.str.cat())\n        tm.assert_series_equal(empty_str, empty.str.title())\n        tm.assert_series_equal(empty_int, empty.str.count('a'))\n        tm.assert_series_equal(empty_bool, empty.str.contains('a'))\n        tm.assert_series_equal(empty_bool, empty.str.startswith('a'))\n        tm.assert_series_equal(empty_bool, empty.str.endswith('a'))\n        tm.assert_series_equal(empty_str, empty.str.lower())"
+  },
+  {
+    "case_id": "pandas-13509",
+    "repository": "pandas",
+    "issue_id": 13509,
+    "file_path": "pandas/indexes/numeric.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-13509\ncollected 0 items / 1 error\n==================================== ERRORS ====================================\n____________ ERROR collecting pandas/tests/indexing/test_floats.py _____________\nImportError while importing test module '/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-13509/pandas/tests/indexing/test_floats.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/lib/python3.8/importlib/__init__.py:127: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\npandas/__init__.py:37: in <module>\n    import pandas.core.config_init\npandas/core/config_init.py:18: in <module>\n    from pandas.formats.format import detect_console_encoding\npandas/formats/format.py:26: in <module>\n    from pandas.core.index import Index, MultiIndex, _ensure_index\npandas/core/index.py:2: in <module>\n    from pandas.indexes.api import *\npandas/indexes/api.py:6: in <module>\n    from pandas.indexes.numeric import (NumericIndex, Float64Index,  # noqa\npandas/indexes/numeric.py:2: in <module>\n    import pandas.core.lib as lib\nE   ModuleNotFoundError: No module named 'pandas.core.lib'\n=============================== warnings summary ==============================="
+  }
+]

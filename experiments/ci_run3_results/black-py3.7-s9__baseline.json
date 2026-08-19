@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "black-55",
+    "repository": "black",
+    "issue_id": 55,
+    "file_path": "black.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "black-46",
+    "repository": "black",
+    "issue_id": 46,
+    "file_path": "black.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  }
+]

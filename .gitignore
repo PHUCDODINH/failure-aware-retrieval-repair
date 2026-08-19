@@ -44,6 +44,9 @@ experiments/analysis/*
 !experiments/analysis/*.py
 !experiments/case_studies/
 !experiments/case_studies/**/*.md
+# Archived CI per-case results cited by the paper
+!experiments/ci_run3_results/
+!experiments/ci_run3_results/*.json
 
 # Backups and logs
 backups/
@@ -53,3 +56,15 @@ backups/
 build/
 dist/
 *.egg-info/
+# (dist/ also holds the generated anonymized replication zip)
+
+# LaTeX build artifacts (paper/)
+paper/*.aux
+paper/*.bbl
+paper/*.blg
+paper/*.log
+paper/*.out
+paper/*.pdf
+paper/*.fls
+paper/*.fdb_latexmk
+paper/hyperxmp.sty

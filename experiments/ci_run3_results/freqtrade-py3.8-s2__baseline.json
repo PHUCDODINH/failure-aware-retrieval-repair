@@ -1,0 +1,46 @@
+[
+  {
+    "case_id": "freqtrade-8229",
+    "repository": "freqtrade",
+    "issue_id": 8229,
+    "file_path": "freqtrade/exchange/kucoin.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n/bin/sh: 1: sudo: not found"
+  },
+  {
+    "case_id": "freqtrade-8082",
+    "repository": "freqtrade",
+    "issue_id": 8082,
+    "file_path": "freqtrade/data/dataprovider.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n/bin/sh: 1: sudo: not found"
+  },
+  {
+    "case_id": "freqtrade-7766",
+    "repository": "freqtrade",
+    "issue_id": 7766,
+    "file_path": "freqtrade/freqtradebot.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n/bin/sh: 1: sudo: not found"
+  },
+  {
+    "case_id": "freqtrade-7765",
+    "repository": "freqtrade",
+    "issue_id": 7765,
+    "file_path": "freqtrade/rpc/rpc.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n/bin/sh: 1: sudo: not found"
+  }
+]

@@ -1,0 +1,108 @@
+%% MSR 2027 technical paper — double-anonymous submission format.
+%% Deadlines: abstract Mon 20 Oct 2026 AoE, paper Thu 23 Oct 2026 AoE.
+%% Limit: 10 pages + 2 pages references. ACM Primary Article Template.
+\documentclass[sigconf,review,anonymous]{acmart}
+
+\usepackage{booktabs}
+\usepackage{xspace}
+
+%% TODO(camera-ready): set correct rights/DOI info from the ACM eform.
+\setcopyright{none}
+\acmConference[MSR 2027]{24th International Conference on Mining Software
+  Repositories}{April 2027}{Dublin, Ireland}
+
+\newcommand{\structured}{\textsc{structured}\xspace}
+\newcommand{\codeonly}{\textsc{code\_only}\xspace}
+\newcommand{\rawtext}{\textsc{raw\_text}\xspace}
+\newcommand{\rawrerank}{\textsc{raw\_text\_rerank}\xspace}
+\newcommand{\oraclecorpus}{\textsc{oracle\_corpus}\xspace}
+\newcommand{\oracleself}{\textsc{oracle\_self}\xspace}
+\newcommand{\pp}{\,pp}
+% Draft-only TODO marker; must be empty before submission.
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+
+\begin{document}
+
+\title[Relevance Without Repair]{Relevance Without Repair: Retrieval Gains Are
+  Fragile and Do Not Convert in Synthetic and Algorithmic LLM Program Repair}
+
+%% Anonymous for review (the anonymous option suppresses these).
+\author{Anonymous Author(s)}
+\affiliation{%
+  \institution{Anonymous Institution}
+  \city{}
+  \country{}}
+
+\begin{abstract}
+Retrieval-augmented generation (RAG) is widely assumed to improve LLM-based
+automated program repair: retrieve similar past bug fixes, show them to the
+model, repair more bugs. We test this assumption with a critical empirical
+study built around \emph{structured failure-aware retrieval}, a reranking
+method that matches a structured representation of the observed test failure
+(failure mode, exception type, suspicious symbols, contract tags) against
+repair metadata inferred from each corpus example's fix. Across four benchmarks
+(QuixBugs, HumanEvalFix, a contamination-controlled MBPP repair split, and
+real repository bugs from PyBugHive), six models, and five retrieval variants,
+we find: (1)~structured reranking significantly improves an independent
+retrieval-relevance metric on QuixBugs ($p{=}0.0001$) but the gain does not
+replicate on a larger benchmark ($n{=}187$, $p{=}0.41$) --- the relevance gain
+itself is fragile; (2)~no retrieval variant significantly improves repair over
+a no-retrieval baseline anywhere --- downstream effects are
+neutral-to-slightly-negative (point estimates $-0.5$ to $-3.7\pp$, equivalent
+to baseline within $\pm 10\pp$ but not $\pm 5\pp$); (3)~a planted-corpus
+experiment that guarantees a perfect example is present decomposes the failure:
+repair then improves by $+14.4$/$+13.4\pp$ ($p{<}0.001$, two models), plain
+dense retrieval already surfaces the planted example 100\% of the time, and
+structured reranking selects it \emph{less} often (94.1\%). The binding
+constraint is primarily \emph{corpus coverage}, not retrieval ranking; ranking
+headroom is small and heterogeneous ($+7.5$ to $-1.6\pp$). On real repository
+bugs, planting the exact fix converts all four baseline failures
+($85.7\%{\to}96.4\%$), directionally supporting coverage transfer.
+%% TODO(powered-CI): replace the sentence above with the powered PyBugHive
+%% result (116 cases, 10 projects) once the CI experiment lands.
+Our results caution that better retrieval relevance is neither robustly
+achievable nor sufficient for better repair, and suggest investing retrieval
+budgets in corpus coverage and curation rather than reranking sophistication.
+\end{abstract}
+
+\begin{CCSXML}
+<ccs2012>
+<concept>
+<concept_id>10011007.10011074.10011099.10011102.10011103</concept_id>
+<concept_desc>Software and its engineering~Software testing and debugging</concept_desc>
+<concept_significance>500</concept_significance>
+</concept>
+</ccs2012>
+\end{CCSXML}
+\ccsdesc[500]{Software and its engineering~Software testing and debugging}
+
+\keywords{automated program repair, retrieval-augmented generation, large
+language models, empirical study, negative results}
+
+\maketitle
+
+\input{sections/01-introduction}
+\input{sections/02-related}
+\input{sections/03-method}
+\input{sections/04-design}
+\input{sections/05-results}
+\input{sections/06-discussion}
+\input{sections/07-threats}
+\input{sections/08-conclusion}
+
+\section*{Data Availability}
+%% The anonymized package is built by scripts/make_anonymized_archive.sh
+%% (dist/replication_anonymized.zip, verified free of identifying strings).
+%% TODO(submission): upload that zip to Zenodo (anonymized record) at
+%% submission time and paste the DOI here; MSR's open-science policy requires
+%% an archival host (Zenodo/Software Heritage), not GitHub alone, under an
+%% open license (CC0/CC-BY 4.0).
+All code, corpora-construction scripts, per-case results, significance and
+equivalence analyses, the blind-audit tooling, and the CI workflow for the
+repository-bug experiment are available in our anonymized replication
+package: \todo{Zenodo DOI of the prepared archive}.
+
+\bibliographystyle{ACM-Reference-Format}
+\bibliography{references}
+
+\end{document}

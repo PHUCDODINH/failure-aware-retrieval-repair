@@ -1,0 +1,35 @@
+[
+  {
+    "case_id": "jax-11010",
+    "repository": "jax",
+    "issue_id": 11010,
+    "file_path": "jax/_src/prng.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n     _   _  __  __\n    | | / \\ \\ \\/ /\n _  | |/ _ \\ \\  /\n| |_| / ___ \\/  \\\n \\___/_/   \\/_/\\_\\\nDownloading bazel from: https://github.com/bazelbuild/bazel/releases/download/5.1.1/bazel-5.1.1-linux-x86_64\nBazel binary path: ./bazel-5.1.1-linux-x86_64\nBazel version: 5.1.1\nPython binary path: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-11010/.venv/bin/python3\nPython version: 3.10\nNumPy version: 2.2.6\nMKL-DNN enabled: yes\nTarget CPU: x86_64\nTarget CPU features: release\nCUDA enabled: no\nTPU enabled: no\nROCm enabled: no\nBuilding XLA and installing it in the jaxlib source tree...\n./bazel-5.1.1-linux-x86_64 run --verbose_failures=true --config=avx_posix --config=mkl_open_source_only :build_wheel -- --output_path=/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-11010/dist --cpu=x86_64\nb''\nExtracting Bazel installation...\nStarting local Bazel server and connecting to it...\nINFO: Options provided by the client:\n  Inherited 'common' options: --isatty=0 --terminal_columns=80\nINFO: Reading rc options for 'run' from /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-11010/.bazelrc:"
+  },
+  {
+    "case_id": "jax-10834",
+    "repository": "jax",
+    "issue_id": 10834,
+    "file_path": "jax/_src/lax/windowed_reductions.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n     _   _  __  __\n    | | / \\ \\ \\/ /\n _  | |/ _ \\ \\  /\n| |_| / ___ \\/  \\\n \\___/_/   \\/_/\\_\\\nDownloading bazel from: https://github.com/bazelbuild/bazel/releases/download/5.1.1/bazel-5.1.1-linux-x86_64\nBazel binary path: ./bazel-5.1.1-linux-x86_64\nBazel version: 5.1.1\nPython binary path: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-10834/.venv/bin/python3\nPython version: 3.10\nNumPy version: 2.2.6\nMKL-DNN enabled: yes\nTarget CPU: x86_64\nTarget CPU features: release\nCUDA enabled: no\nTPU enabled: no\nROCm enabled: no\nBuilding XLA and installing it in the jaxlib source tree...\n./bazel-5.1.1-linux-x86_64 run --verbose_failures=true --config=avx_posix --config=mkl_open_source_only :build_wheel -- --output_path=/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-10834/dist --cpu=x86_64\nb''\nStarting local Bazel server and connecting to it...\nINFO: Options provided by the client:\n  Inherited 'common' options: --isatty=0 --terminal_columns=80\nINFO: Reading rc options for 'run' from /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-10834/.bazelrc:\n  Inherited 'common' options: --experimental_repo_remote_exec"
+  },
+  {
+    "case_id": "jax-10729",
+    "repository": "jax",
+    "issue_id": 10729,
+    "file_path": "jax/_src/lax/convolution.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[ERROR] Command '/opt/evalvenv/bin/pipenv run python3 build/build.py' timed out after 2700 seconds\nTraceback (most recent call last):\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/src/eval/evaluate_pybughive.py\", line 806, in main\n    ok, detail = evaluate_case(\n                 ^^^^^^^^^^^^^^\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/src/eval/evaluate_pybughive.py\", line 559, in evaluate_case\n    install_ok, install_output = install_case(case_dir, case, pipenv_bin, install_timeout)\n                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/src/eval/evaluate_pybughive.py\", line 528, in install_case\n    result = run_shell_steps(steps, case_dir, pipenv_bin, env, timeout)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/src/eval/evaluate_pybughive.py\", line 467, in run_shell_steps\n    last_result = subprocess.run(\n                  ^^^^^^^^^^^^^^^\n  File \"/github/home/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/subprocess.py\", line 550, in run\n    stdout, stderr = process.communicate(input, timeout=timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/github/home/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/subprocess.py\", line 1209, in communicate\n    stdout, stderr = self._communicate(input, endtime, timeout)\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/github/home/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/subprocess.py\", line 2116, in _communicate\n    self._check_timeout(endtime, orig_timeout, stdout, stderr)\n  File \"/github/home/.local/share/uv/python/cpython-3.12.14-linux-x86_64-gnu/lib/python3.12/subprocess.py\", line 1253, in _check_timeout\n    raise TimeoutExpired(\nsubprocess.TimeoutExpired: Command '/opt/evalvenv/bin/pipenv run python3 build/build.py' timed out after 2700 seconds\n"
+  }
+]

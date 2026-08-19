@@ -1,0 +1,44 @@
+\section{Threats to Validity}
+\label{sec:threats}
+
+\paragraph{External validity.} Our \emph{powered} executable results are on
+algorithmic and synthetic-mutation benchmarks (QuixBugs, HumanEvalFix, MBPP
+mutations). The real-repository evidence (PyBugHive \texttt{black}) is
+directionally consistent but underpowered ($p{=}0.375$).
+%% TODO(powered-CI): update once the 116-case experiment lands.
+Relatedly, the coverage thesis relies on a ``perfect example'' being
+\emph{constructible}, which is cleanest for synthetic mutations; on real bugs
+the notion is fuzzier. The black experiment partially addresses this ---
+planting exact pairs did convert real baseline failures through the patch
+layer --- but a powered real-bug decomposition remains the largest open
+threat.
+
+\paragraph{Construct validity.} Both automated relevance measures are
+proxies. The tag-compatibility metric shares vocabulary with the reranker and
+overstates; we therefore lead with the independent fix-diff metric, which
+shares nothing with the reranker objective. A blind two-annotator human audit
+is the missing gold standard.
+%% TODO(audit): replace with audit results (rates + Cohen's kappa) when done.
+The QuixBugs relevance gain, our one clean positive, does not replicate on
+MBPP; we present both the benchmark-specificity and the not-robust
+interpretations rather than asserting either.
+
+\paragraph{Internal validity.} The coverage-vs-ranking decomposition is
+shown on one bug family (MBPP mutations) with two non-saturated models plus a
+saturated control; the direction replicates across two independent
+architectures, but the magnitudes are benchmark-specific. \oracleself\ is a
+sanity check, not a headroom estimate, and no claim rests on it. Temperature-0
+runs are near-deterministic (at most 1/187 flips), so single-trial deltas are
+not noise artifacts; QuixBugs results are additionally reported as 5-trial
+means.
+
+\paragraph{Statistical power.} With $n{=}40$--$187$, minimum detectable
+effects are $4.8$--$9.1\pp$; effects smaller than that cannot be excluded,
+and our equivalence claims are correspondingly bounded at $\pm 10\pp$ (weak
+equivalence). We report exact tests throughout and defer to them where
+approximations disagree.
+
+\paragraph{RAGFix recomputation.} Our recomputation uses RAGFix's released
+per-example outputs but compares \emph{different runs}; it is inferential,
+not a controlled post-processing ablation, and we accordingly claim only
+consistency with an artifact, not proof.

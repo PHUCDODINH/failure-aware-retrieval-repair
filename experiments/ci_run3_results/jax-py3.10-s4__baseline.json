@@ -1,0 +1,35 @@
+[
+  {
+    "case_id": "jax-9969",
+    "repository": "jax",
+    "issue_id": 9969,
+    "file_path": "jax/_src/api.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n     _   _  __  __\n    | | / \\ \\ \\/ /\n _  | |/ _ \\ \\  /\n| |_| / ___ \\/  \\\n \\___/_/   \\/_/\\_\\\nDownloading bazel from: https://github.com/bazelbuild/bazel/releases/download/5.0.0/bazel-5.0.0-linux-x86_64\nBazel binary path: ./bazel-5.0.0-linux-x86_64\nBazel version: 5.0.0\nPython binary path: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-9969/.venv/bin/python3\nPython version: 3.10\nNumPy version: 2.2.6\nMKL-DNN enabled: yes\nTarget CPU: x86_64\nTarget CPU features: release\nCUDA enabled: no\nTPU enabled: no\nROCm enabled: no\nBuilding XLA and installing it in the jaxlib source tree...\n./bazel-5.0.0-linux-x86_64 run --verbose_failures=true --config=avx_posix --config=mkl_open_source_only :build_wheel -- --output_path=/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-9969/dist --cpu=x86_64\nb''\nExtracting Bazel installation...\nStarting local Bazel server and connecting to it...\nINFO: Options provided by the client:\n  Inherited 'common' options: --isatty=0 --terminal_columns=80\nINFO: Reading rc options for 'run' from /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-9969/.bazelrc:"
+  },
+  {
+    "case_id": "jax-9429",
+    "repository": "jax",
+    "issue_id": 9429,
+    "file_path": "jax/_src/tree_util.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n     _   _  __  __\n    | | / \\ \\ \\/ /\n _  | |/ _ \\ \\  /\n| |_| / ___ \\/  \\\n \\___/_/   \\/_/\\_\\\nDownloading bazel from: https://github.com/bazelbuild/bazel/releases/download/5.0.0/bazel-5.0.0-linux-x86_64\nBazel binary path: ./bazel-5.0.0-linux-x86_64\nBazel version: 5.0.0\nPython binary path: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-9429/.venv/bin/python3\nPython version: 3.10\nNumPy version: 2.2.6\nMKL-DNN enabled: yes\nTarget CPU: x86_64\nTarget CPU features: release\nCUDA enabled: no\nTPU enabled: no\nROCm enabled: no\nBuilding XLA and installing it in the jaxlib source tree...\n./bazel-5.0.0-linux-x86_64 run --verbose_failures=true --config=avx_posix --config=mkl_open_source_only :build_wheel -- --output_path=/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-9429/dist --cpu=x86_64\nb''\nStarting local Bazel server and connecting to it...\nINFO: Options provided by the client:\n  Inherited 'common' options: --isatty=0 --terminal_columns=80\nINFO: Reading rc options for 'run' from /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-9429/.bazelrc:\n  Inherited 'common' options: --experimental_repo_remote_exec"
+  },
+  {
+    "case_id": "jax-8688",
+    "repository": "jax",
+    "issue_id": 8688,
+    "file_path": "jax/_src/lax/parallel.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n     _   _  __  __\n    | | / \\ \\ \\/ /\n _  | |/ _ \\ \\  /\n| |_| / ___ \\/  \\\n \\___/_/   \\/_/\\_\\\nDownloading bazel from: https://github.com/bazelbuild/bazel/releases/download/4.2.1/bazel-4.2.1-linux-x86_64\nBazel binary path: ./bazel-4.2.1-linux-x86_64\nBazel version: 4.2.1\nPython binary path: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-8688/.venv/bin/python3\nPython version: 3.10\nNumPy version: 2.2.6\nMKL-DNN enabled: yes\nTarget CPU: x86_64\nTarget CPU features: release\nCUDA enabled: no\nTPU enabled: no\nROCm enabled: no\nBuilding XLA and installing it in the jaxlib source tree...\n./bazel-4.2.1-linux-x86_64 run --verbose_failures=true --config=avx_posix --config=mkl_open_source_only :build_wheel -- --output_path=/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-8688/dist --cpu=x86_64\nb''\nExtracting Bazel installation...\nStarting local Bazel server and connecting to it...\nINFO: Options provided by the client:\n  Inherited 'common' options: --isatty=0 --terminal_columns=80\nINFO: Reading rc options for 'run' from /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-8688/.bazelrc:"
+  }
+]

@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-13598",
+    "repository": "pandas",
+    "issue_id": 13598,
+    "file_path": "pandas/core/strings.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "pandas-13509",
+    "repository": "pandas",
+    "issue_id": 13509,
+    "file_path": "pandas/indexes/numeric.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-13509\ncollected 0 items / 1 error\n==================================== ERRORS ====================================\n____________ ERROR collecting pandas/tests/indexing/test_floats.py _____________\nImportError while importing test module '/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-13509/pandas/tests/indexing/test_floats.py'.\nHint: make sure your test modules/packages have valid Python names.\nTraceback:\n/usr/local/lib/python3.8/importlib/__init__.py:127: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\npandas/__init__.py:37: in <module>\n    import pandas.core.config_init\npandas/core/config_init.py:18: in <module>\n    from pandas.formats.format import detect_console_encoding\npandas/formats/format.py:26: in <module>\n    from pandas.core.index import Index, MultiIndex, _ensure_index\npandas/core/index.py:2: in <module>\n    from pandas.indexes.api import *\npandas/indexes/api.py:6: in <module>\n    from pandas.indexes.numeric import (NumericIndex, Float64Index,  # noqa\npandas/indexes/numeric.py:2: in <module>\n    from pandas.core.indexes.base import Index\nE   ModuleNotFoundError: No module named 'pandas.core.indexes'\n=============================== warnings summary ==============================="
+  }
+]

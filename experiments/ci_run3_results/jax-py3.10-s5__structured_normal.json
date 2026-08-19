@@ -1,0 +1,13 @@
+[
+  {
+    "case_id": "jax-8634",
+    "repository": "jax",
+    "issue_id": 8634,
+    "file_path": "jax/_src/ops/scatter.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n     _   _  __  __\n    | | / \\ \\ \\/ /\n _  | |/ _ \\ \\  /\n| |_| / ___ \\/  \\\n \\___/_/   \\/_/\\_\\\nDownloading bazel from: https://github.com/bazelbuild/bazel/releases/download/4.1.0/bazel-4.1.0-linux-x86_64\nBazel binary path: ./bazel-4.1.0-linux-x86_64\nBazel version: 4.1.0\nPython binary path: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-8634/.venv/bin/python3\nPython version: 3.10\nNumPy version: 2.2.6\nMKL-DNN enabled: yes\nTarget CPU: x86_64\nTarget CPU features: release\nCUDA enabled: no\nTPU enabled: no\nROCm enabled: no\nBuilding XLA and installing it in the jaxlib source tree...\n./bazel-4.1.0-linux-x86_64 run --verbose_failures=true --config=avx_posix --config=mkl_open_source_only :build_wheel -- --output_path=/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/jax-8634/dist --cpu=x86_64\nb''\nWARNING: Waiting for server process to terminate (waited 5 seconds, waiting at most 60)\nWARNING: Waiting for server process to terminate (waited 10 seconds, waiting at most 60)\nWARNING: Waiting for server process to terminate (waited 30 seconds, waiting at most 60)\nINFO: Waited 60 seconds for server process (pid=448) to terminate.\nWARNING: Waiting for server process to terminate (waited 5 seconds, waiting at most 10)"
+  }
+]

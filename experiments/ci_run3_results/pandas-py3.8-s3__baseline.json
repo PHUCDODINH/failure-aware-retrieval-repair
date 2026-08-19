@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-15822",
+    "repository": "pandas",
+    "issue_id": 15822,
+    "file_path": "pandas/core/frame.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "pandas-15676",
+    "repository": "pandas",
+    "issue_id": 15676,
+    "file_path": "pandas/tools/merge.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  }
+]

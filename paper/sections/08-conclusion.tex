@@ -1,0 +1,26 @@
+\section{Conclusion}
+\label{sec:conclusion}
+
+We set out to make retrieval-augmented program repair work better by making
+retrieval more relevant, and instead produced a cautionary decomposition of
+why that framing fails. Structured failure-aware reranking can improve a
+retrieval-relevance proxy, but the gain is fragile across benchmarks, and
+even where it holds it does not convert to repair: downstream effects are
+neutral-to-slightly-negative across six models and four benchmarks, bounded
+within $\pm 10\pp$. A planted-corpus experiment locates the binding
+constraint: when a sufficiently relevant example exists in the corpus, plain
+dense retrieval already surfaces it and repair improves by double digits;
+when it does not --- the common case --- no amount of reranking
+sophistication helps, and our reranker even selects the perfect example
+slightly less often than dense retrieval. Coverage dominates ranking. On real
+repository bugs the same pattern holds directionally, with a powered
+replication in progress.
+
+For practitioners, the guidance is concrete: before investing in retrieval
+scoring for repair, invest in the corpus --- coverage and curation are where
+the recoverable headroom sits, and the headroom scales with how much the
+model currently fails. For evaluators, our results argue for
+contamination-controlled corpora, post-processing ablations, and equivalence
+bounds as defaults in RAG-repair studies. All artifacts, including the
+planted-corpus builders and the CI harness for powered real-bug replication,
+are released for reuse.

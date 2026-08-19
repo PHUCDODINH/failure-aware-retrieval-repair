@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "discord.py-7818",
+    "repository": "discord.py",
+    "issue_id": 7818,
+    "file_path": "discord/app_commands/commands.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "discord.py-7676",
+    "repository": "discord.py",
+    "issue_id": 7676,
+    "file_path": "discord/ext/tasks/__init__.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/discord.py-7676\nconfigfile: pyproject.toml\nplugins: mock-3.14.1, asyncio-0.24.0, cov-5.0.0\nasyncio: mode=strict, default_loop_scope=None\ncollected 0 items / 1 error\n==================================== ERRORS ====================================\n___________________ ERROR collecting tests/test_ext_tasks.py ___________________\ntests/test_ext_tasks.py:16: in <module>\n    from discord.ext import tasks\ndiscord/ext/tasks/__init__.py:1: in <module>\n    def _get_next_sleep_time(self, now: datetime.datetime = MISSING) -> datetime.datetime:\nE   NameError: name 'MISSING' is not defined\n=========================== short test summary info ============================\nERROR tests/test_ext_tasks.py - NameError: name 'MISSING' is not defined\n!!!!!!!!!!!!!!!!!!!! Interrupted: 1 error during collection !!!!!!!!!!!!!!!!!!!!\n=============================== 1 error in 0.37s ===============================\n/__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/discord.py-7676/.venv/lib/python3.8/site-packages/pytest_asyncio/plugin.py:208: PytestDeprecationWarning: The configuration option \"asyncio_default_fixture_loop_scope\" is unset.\nThe event loop scope for asynchronous fixtures will default to the fixture caching scope. Future versions of pytest-asyncio will default the loop scope for asynchronous fixtures to function scope. Set the default fixture loop scope explicitly in order to avoid unexpected behavior in the future. Valid fixture loop scopes are: \"function\", \"class\", \"module\", \"package\", \"session\"\n  warnings.warn(PytestDeprecationWarning(_DEFAULT_FIXTURE_LOOP_SCOPE_UNSET))"
+  }
+]

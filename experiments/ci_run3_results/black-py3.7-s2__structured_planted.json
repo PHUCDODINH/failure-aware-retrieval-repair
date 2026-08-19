@@ -1,0 +1,46 @@
+[
+  {
+    "case_id": "black-389",
+    "repository": "black",
+    "issue_id": 389,
+    "file_path": "black.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "black-385",
+    "repository": "black",
+    "issue_id": 385,
+    "file_path": "black.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "black-371",
+    "repository": "black",
+    "issue_id": 371,
+    "file_path": "black.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "black-335",
+    "repository": "black",
+    "issue_id": 335,
+    "file_path": "black.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  }
+]

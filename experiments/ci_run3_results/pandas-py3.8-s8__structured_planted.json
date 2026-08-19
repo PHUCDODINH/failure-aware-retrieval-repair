@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-15155",
+    "repository": "pandas",
+    "issue_id": 15155,
+    "file_path": "pandas/indexes/category.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  },
+  {
+    "case_id": "pandas-15055",
+    "repository": "pandas",
+    "issue_id": 15055,
+    "file_path": "pandas/core/strings.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  }
+]

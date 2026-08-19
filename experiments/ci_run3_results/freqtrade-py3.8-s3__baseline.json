@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "freqtrade-7368",
+    "repository": "freqtrade",
+    "issue_id": 7368,
+    "file_path": "freqtrade/freqtradebot.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n/bin/sh: 1: sudo: not found"
+  },
+  {
+    "case_id": "freqtrade-7264",
+    "repository": "freqtrade",
+    "issue_id": 7264,
+    "file_path": "freqtrade/resolvers/iresolver.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "[INSTALL FAILED]\n/bin/sh: 1: sudo: not found"
+  }
+]

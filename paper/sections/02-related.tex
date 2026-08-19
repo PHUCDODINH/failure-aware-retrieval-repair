@@ -1,0 +1,48 @@
+\section{Background and Related Work}
+\label{sec:related}
+
+\paragraph{LLM-based program repair.} Modern repair pipelines prompt an LLM
+with buggy code and, usually, an observed failure (test output, stack trace),
+and validate candidate patches against the test suite. Benchmarks span
+algorithmic bugs (QuixBugs~\cite{quixbugs}), function-level edits
+(HumanEvalFix~\cite{octopack}), synthetic mutations
+(MBPP-derived~\cite{mbpp}), and real repository bugs
+(BugsInPy~\cite{bugsinpy}, PyBugHive~\cite{pybughive}). Our study uses all
+four regimes deliberately: the first three give executable, well-powered
+comparisons; the last tests external validity.
+
+\paragraph{Retrieval-augmented repair.} Several systems retrieve historical
+bug-fix examples to condition repair. InferFix~\cite{inferfix} retrieves by
+static-analyzer bug type; ReCode~\cite{recode} retrieves by algorithm type;
+RAP-Gen~\cite{rapgen} learns a hybrid retriever over CodeT5. Our retrieval
+signal differs: we extract a structured state from the \emph{dynamic} test
+failure (runtime signal), which is orthogonal to static bug types, and we make
+the reranking function explicit and ablatable rather than learned
+end-to-end. Direct numeric comparison with these systems is infeasible
+(closed source, different languages); our contribution is not a better
+system but a controlled analysis of whether the retrieval component can pay
+off at all.
+
+RAGFix~\cite{ragfix} retrieves Stack Overflow posts through a
+question-answering knowledge graph and reports repair gains on HumanEvalFix
+with Llama-3 models --- a different knowledge source (crowd discussion rather
+than bug-fix pairs), but the same underlying bet that retrieved context
+improves repair. In a recomputation from its released per-example outputs,
+the reported 70B improvement is consistent with a post-processing
+(import-fixing) artifact rather than retrieval itself; a controlled ablation
+on identical outputs would be needed to confirm this, so we flag it as a
+caveat rather than a claim. Our own de-confounded measurements
+(Section~\ref{sec:results-conversion}) agree with the direction that
+retrieval is neutral-to-harmful for capable models on this benchmark.
+
+\paragraph{Negative and analytical results on RAG.} Outside repair, RAG
+studies increasingly report conditions under which retrieval does not help or
+hurts: irrelevant retrieved context measurably degrades LLM
+reasoning~\cite{distracted}, models underuse information positioned
+mid-context~\cite{lostinmiddle}, and retrieval helps mainly where the
+model's parametric knowledge is weak~\cite{whennottotrust} --- a pattern our
+headroom results echo in the repair setting
+(Section~\ref{sec:results-mechanism}). Our planted-corpus design contributes
+a repair-specific mechanism: it separates \emph{whether the corpus contains a
+sufficiently relevant example} (coverage) from \emph{whether the retriever
+surfaces it} (ranking), which prior repair evaluations conflate.

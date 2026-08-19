@@ -1,0 +1,13 @@
+[
+  {
+    "case_id": "salt-64477",
+    "repository": "salt",
+    "issue_id": 64477,
+    "file_path": "salt/states/file.py",
+    "retrieval_variant": "structured",
+    "include_case_metadata": false,
+    "rag_max_attempts": 1,
+    "pass": true,
+    "detail": ""
+  }
+]

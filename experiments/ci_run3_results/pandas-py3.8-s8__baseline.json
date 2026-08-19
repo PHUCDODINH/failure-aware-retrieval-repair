@@ -1,0 +1,24 @@
+[
+  {
+    "case_id": "pandas-15155",
+    "repository": "pandas",
+    "issue_id": 15155,
+    "file_path": "pandas/indexes/category.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": false,
+    "detail": "============================= test session starts ==============================\nplatform linux -- Python 3.8.20, pytest-8.3.5, pluggy-1.5.0\nrootdir: /__w/failure-aware-retrieval-repair/failure-aware-retrieval-repair/temp_pybughive_eval/pandas-15155\ncollected 0 items / 1 error\n==================================== ERRORS ====================================\n__________ ERROR collecting pandas/tests/groupby/test_categorical.py ___________\n/usr/local/lib/python3.8/importlib/__init__.py:127: in import_module\n    return _bootstrap._gcd_import(name[level:], package, level)\n<frozen importlib._bootstrap>:1014: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:991: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:961: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:219: in _call_with_frames_removed\n    ???\n<frozen importlib._bootstrap>:1014: in _gcd_import\n    ???\n<frozen importlib._bootstrap>:991: in _find_and_load\n    ???\n<frozen importlib._bootstrap>:961: in _find_and_load_unlocked\n    ???\n<frozen importlib._bootstrap>:219: in _call_with_frames_removed\n    ???\n<frozen importlib._bootstrap>:1014: in _gcd_import"
+  },
+  {
+    "case_id": "pandas-15055",
+    "repository": "pandas",
+    "issue_id": 15055,
+    "file_path": "pandas/core/strings.py",
+    "retrieval_variant": null,
+    "include_case_metadata": false,
+    "rag_max_attempts": null,
+    "pass": true,
+    "detail": ""
+  }
+]

@@ -1,0 +1,42 @@
+\section{Discussion}
+\label{sec:discussion}
+
+\paragraph{Why doesn't relevance convert?} Our decomposition suggests a
+simple economy: a retrieved example helps only if it is \emph{sufficiently}
+relevant to the specific fix, and realistic corpora rarely contain such an
+example for a given new bug. When one exists (planted), even plain dense
+retrieval finds it and repair converts; when none exists, improving the
+\emph{ordering} of insufficient examples cannot manufacture the missing
+knowledge. Reranking sophistication addresses the part of the problem that
+was not binding.
+
+\paragraph{Headroom scales with what the model currently fails.} The planted
+gain is $+14$/$+13\pp$ on the two models with mid-range base accuracy and
+$\sim 0$ on the saturated one. We frame this as ``headroom scales with the
+fraction of currently-failed problems that a perfect example would fix''
+rather than a categorical knowledge-gap principle: Qwen2.5-7B ($78.6\%$ base)
+is close to GPT-4o's HumanEvalFix base ($80.5\%$), and the distinguishing
+variable in our data is base accuracy, not model family.
+
+\paragraph{Cost: structured RAG is Pareto-dominated for repair.} Measured on
+HumanEvalFix GPT-4o traces, the structured prompt averages 4{,}632 input
+characters ($\approx$1{,}158 tokens) against 1{,}199 ($\approx$300) for the
+baseline --- a ${\sim}4\times$ input multiplier, plus embedding, indexing,
+and retrieval infrastructure --- for equal-or-worse accuracy. In absolute
+terms the marginal cost is small ($\sim$\$0.002/repair at GPT-4o input
+pricing); the point is direction: you pay more and get nothing. The
+actionable guidance for practitioners follows from RQ3: \textbf{spend the
+retrieval budget on corpus coverage and curation, not reranking
+sophistication} --- the two are separable, and only one showed positive
+returns anywhere in this study.
+
+\paragraph{Implications for reported RAG-repair gains.} Contamination and
+post-processing can masquerade as retrieval effects. In our own PyBugHive
+setting, an uncontrolled corpus (containing same-project entries) flipped
+results from neutral to strongly negative-looking for RAG variants; the
+project-held-out control removed the artifact. Externally, our recomputation
+of RAGFix's released outputs (Section~\ref{sec:related}) is consistent with a
+post-processing artifact. We recommend that RAG-repair evaluations
+(i)~hold out same-project corpus entries, (ii)~ablate post-processing
+separately from retrieval, and (iii)~report equivalence bounds, not bare
+non-significance.
