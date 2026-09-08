@@ -248,25 +248,25 @@ attrition is project-correlated, so the usable set is dominated by two
 projects and conclusions from it inherit that skew
 (Section~\ref{sec:threats}).
 
-\begin{table}[!t]
+\begin{table}[!htb]
 \caption{Real-bug attrition by project (cases usable in all three arms /
 supported cases).}
 \label{tab:attrition}
 \centering
-\small
-\begin{tabular}{lrl}
+\footnotesize
+\begin{tabular}{@{}lrl@{}}
 \toprule
-Project & usable/supported & Dominant loss cause \\
+Project & usable/supp. & Dominant loss cause \\
 \midrule
-black & 26/34 & per-commit env build \\
-pandas & 23/34 & C-extension build on some commits \\
+black & 26/34 & env build (some commits) \\
+pandas & 23/34 & C-ext.\ build (some commits) \\
 salt & 3/7 & dependency resolution \\
 discord.py & 1/2 & env build \\
 cookiecutter, scrapy & 2/2 & --- \\
-jax & 0/13 & test-suite timeouts (15\,min cap) \\
+jax & 0/13 & test-suite timeouts \\
 freqtrade & 0/12 & dependency builds \\
 poetry & 0/8 & pipx/poetry toolchain \\
-spaCy & 0/4 & Cython dependency builds \\
+spaCy & 0/4 & Cython builds \\
 \midrule
 total & 55/116 & \\
 \bottomrule
@@ -457,7 +457,8 @@ on the saturated control. $^{***}$: $p{<}0.001$, exact McNemar.}
 baseline).}
 \label{tab:decomposition}
 \centering
-\begin{tabular}{lrrrr}
+\footnotesize
+\begin{tabular}{@{}lrrrr@{}}
 \toprule
 Model (base) & \oraclecorpus & planted & rank.\ hr & cov.\ hr \\
 \midrule
@@ -503,9 +504,10 @@ four baseline failures ($b{=}1$, $c{=}4$, $p{=}0.375$, underpowered).
 all arms; exact McNemar vs baseline within one CI run).}
 \label{tab:powered}
 \centering
-\begin{tabular}{lrrr}
+\footnotesize
+\begin{tabular}{@{}lrrr@{}}
 \toprule
- & baseline & \structured(normal) & \structured(planted) \\
+ & baseline & struct.\ (normal) & struct.\ (planted) \\
 \midrule
 pooled (55) & 42 (76.4\%) & 39 (70.9\%) & 39 (70.9\%) \\
 \quad vs baseline & --- & $b{=}7$, $c{=}4$ & $b{=}7$, $c{=}4$ \\
@@ -558,22 +560,18 @@ prompt'' from the instrumented rerun (retrieval-order nondeterminism may
 differ per run). All regressions were applied patches that failed tests.}
 \label{tab:discordant}
 \centering
-\small
-\begin{tabular}{llll}
+\footnotesize
+\begin{tabular}{@{}llll@{}}
 \toprule
 Case & Outcome & Pair in prompt & Note \\
 \midrule
-black-232 & converted & no (sibling 297) & also converted in pilot \\
-black-273 & converted & no (sibling 297) & also converted in pilot \\
-black-297 & converted & yes & also converted in pilot \\
+black-232 & converted & no (sibling 297) & pilot: converted \\
+black-273 & converted & no (sibling 297) & pilot: converted \\
+black-297 & converted & yes & pilot: converted \\
 pandas-14973 & converted & yes & \\
-black-95 & regressed & yes & applied, tests fail \\
-black-238 & regressed & yes & applied, tests fail \\
-black-334 & regressed & yes & applied, tests fail \\
-pandas-14652 & regressed & yes & applied, tests fail \\
-pandas-14770 & regressed & yes & applied, tests fail \\
-pandas-14776 & regressed & yes & applied, tests fail \\
-pandas-15488 & regressed & yes & applied, tests fail \\
+black-95, -238, -334 & regressed & yes & applied, tests fail \\
+pandas-14652, -14770 & regressed & yes & applied, tests fail \\
+pandas-14776, -15488 & regressed & yes & applied, tests fail \\
 \bottomrule
 \end{tabular}
 \end{table}
