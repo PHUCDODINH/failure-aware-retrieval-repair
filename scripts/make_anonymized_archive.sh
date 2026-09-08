@@ -22,13 +22,16 @@ mkdir -p "$STAGE" "$OUT_DIR"
 # 1. Export tracked files (working-tree versions, no git metadata).
 git -C "$REPO_ROOT" archive HEAD | tar -x -C "$STAGE"
 
-# 2. Exclude the paper source (not part of the replication package).
-rm -rf "$STAGE/paper"
+# 2. Exclude the paper source and this anonymizer (its identifier list would self-match).
+rm -rf "$STAGE/paper" "$STAGE/scripts/make_anonymized_archive.sh"
 
 # 3. Scrub machine-specific absolute paths -> repo-relative.
-find "$STAGE" -name '*.md' -print0 | xargs -0 sed -i '' \
+find "$STAGE" \( -name '*.md' -o -name '*.json' -o -name '*.yml' -o -name '*.py' \) -print0 | xargs -0 sed -i '' \
   -e 's|/Users/[^/]*/PycharmProjects/RAGtest/||g' \
-  -e 's|/Users/[^/]*/PycharmProjects/RAGtest|.|g'
+  -e 's|/Users/[^/]*/PycharmProjects/RAGtest|.|g' \
+  -e 's|failure-aware-retrieval-repair|anon-repo|g' \
+  -e 's|Structure-Failure-Aware-Retrieval-for-Program-Repair|anon-repo|g' \
+  -e 's|PHUCDODINH|anon|g'
 
 # 4. Archive README for reviewers.
 cat > "$STAGE/ARCHIVE_README.md" <<'EOF'
