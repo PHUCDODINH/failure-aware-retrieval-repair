@@ -9,6 +9,14 @@
 \usepackage{cite}
 \usepackage{url}
 
+% Float placement: let tables share pages with text instead of piling up.
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.6}
+\renewcommand{\textfraction}{0.07}
+\renewcommand{\floatpagefraction}{0.8}
+\setcounter{topnumber}{4}
+\setcounter{totalnumber}{6}
+
 \newcommand{\structured}{\textsc{structured}\xspace}
 \newcommand{\codeonly}{\textsc{code\_only}\xspace}
 \newcommand{\oraclecorpus}{\textsc{oracle\_corpus}\xspace}
@@ -240,7 +248,7 @@ attrition is project-correlated, so the usable set is dominated by two
 projects and conclusions from it inherit that skew
 (Section~\ref{sec:threats}).
 
-\begin{table}[t]
+\begin{table}[!t]
 \caption{Real-bug attrition by project (cases usable in all three arms /
 supported cases).}
 \label{tab:attrition}
@@ -361,7 +369,7 @@ direction, and rest no claim on it.
 
 \subsection{RQ2: Conversion --- neutral to slightly negative}
 
-\begin{table}[t]
+\begin{table}[!t]
 \caption{Downstream repair vs.\ no-retrieval baseline (single attempt,
 $k{=}2$). All differences ns by exact McNemar.}
 \label{tab:downstream}
@@ -410,7 +418,7 @@ Had we not caught it, the paper would have reported a large negative effect
 that was an artifact --- the mirror image of the post-processing artifacts
 we caution against in Section~\ref{sec:discussion}.
 
-\begin{table}[t]
+\begin{table}[!t]
 \caption{Corpus--benchmark match control (HumanEvalFix, structured
 variant, pass rate). Neither corpus beats the no-retrieval baseline; the
 corpus effect flips sign across models.}
@@ -435,7 +443,7 @@ bypasses retrieval and shows the model the \emph{best real} corpus example
 \emph{coverage}: each test problem's exact buggy$\to$fixed pair is inserted
 and normal retrieval runs.
 
-\begin{figure}[t]
+\begin{figure}[!t]
 \centering
 \includegraphics[width=\columnwidth]{../figures/decomposition.pdf}
 \caption{Coverage headroom (planted $-$ \oraclecorpus) dwarfs ranking
@@ -444,7 +452,7 @@ on the saturated control. $^{***}$: $p{<}0.001$, exact McNemar.}
 \label{fig:decomposition}
 \end{figure}
 
-\begin{table}[t]
+\begin{table}[!t]
 \caption{Coverage-vs-ranking decomposition ($n{=}187$; exact McNemar vs
 baseline).}
 \label{tab:decomposition}
@@ -490,7 +498,7 @@ pilot was encouraging: planting the exact buggy$\to$fixed pairs lifted
 GPT-4o-mini from $85.7\%$ to $96.4\%$ on 28 black cases, converting all
 four baseline failures ($b{=}1$, $c{=}4$, $p{=}0.375$, underpowered).
 
-\begin{table}[t]
+\begin{table}[!t]
 \caption{Real-bug replication (PyBugHive, GPT-4o-mini, 55 cases usable in
 all arms; exact McNemar vs baseline within one CI run).}
 \label{tab:powered}
@@ -544,7 +552,7 @@ receive its planted pair), so an exact-fix example in the prompt neither
 protects passing cases nor reliably converts failing ones. Table~\ref{tab:discordant} lists the 11 discordant baseline-vs-planted
 cases with their retrieval status from the instrumented rerun.
 
-\begin{table}[t]
+\begin{table}[!t]
 \caption{The 11 discordant baseline-vs-planted real-bug cases. ``Pair in
 prompt'' from the instrumented rerun (retrieval-order nondeterminism may
 differ per run). All regressions were applied patches that failed tests.}
